@@ -24,19 +24,19 @@ type RoundResult = {
 
 const vibeSlides = [
   {
-    label: "TEST YOUR INTUITION",
-    quote: "Individual freedom matters less than the collective mission.",
-    action: "CULT OR CEO?"
+    label: "PHASE 01: THE QUOTE",
+    quote: "Is it a radical startup vision or a dangerous cult decree?",
+    action: "READ CAREFULLY"
   },
   {
-    label: "VISIONARY OR VILLAIN?",
-    quote: "Humanity must escape its single point of failure.",
-    action: "WHO SAID IT?"
+    label: "PHASE 02: THE CHOICE",
+    quote: "Pick your path. Is this a Tech Visionary or a Master Manipulator?",
+    action: "CHOOSE WISELY"
   },
   {
-    label: "THE ASCENSION BEGINS",
-    quote: "You have been lied to about what is possible. We are here to show you the truth.",
-    action: "READY TO PLAY?"
+    label: "PHASE 03: THE SURVIVAL",
+    quote: "You have 3 strikes. One wrong move and you're out.",
+    action: "STAY SHARP"
   },
 ];
 
@@ -236,19 +236,21 @@ export function CultTechGame() {
               <CarouselContent>
                 {vibeSlides.map((slide) => (
                   <CarouselItem key={slide.label}>
-                    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8 text-center backdrop-blur-md shadow-ritual transition-all hover:border-primary/50">
-                      <div className="absolute -right-4 -top-4 font-serif text-9xl opacity-10 text-primary">“</div>
-                      <p className="font-ui text-[10px] font-bold uppercase tracking-[0.3em] text-primary/80">{slide.label}</p>
-                      <p className="mt-6 font-serif text-2xl font-black leading-tight text-foreground sm:text-4xl italic">
+                    <div className="group relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-10 text-center backdrop-blur-sm shadow-ritual transition-all hover:border-primary/50">
+                      <div className="absolute -right-4 -top-4 font-serif text-9xl opacity-5 text-primary">“</div>
+                      <p className="font-ui text-[10px] font-bold uppercase tracking-[0.4em] text-primary">{slide.label}</p>
+                      <p className="mt-6 font-serif text-2xl font-black leading-tight text-foreground sm:text-3xl">
                         {slide.quote}
                       </p>
-                      <div className="mt-8 inline-block rounded-full border border-primary/30 px-6 py-2 font-ui text-xs font-bold uppercase tracking-widest text-primary animate-pulse">
+                      <div className="mt-10 inline-block rounded-full bg-primary/10 px-6 py-2 font-ui text-[10px] font-bold uppercase tracking-widest text-primary border border-primary/20">
                         {slide.action}
                       </div>
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
+              <CarouselPrevious className="left-2 top-auto -bottom-16 translate-y-0" />
+              <CarouselNext className="right-2 top-auto -bottom-16 translate-y-0" />
             </Carousel>
 
             <div className="mt-24 flex animate-bounce flex-col items-center gap-2 text-muted-foreground/40">
