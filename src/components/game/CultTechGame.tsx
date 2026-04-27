@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Clipboard, Rocket, Share2, Trophy } from "lucide-react";
+import { Clipboard, Home, Rocket, Share2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
@@ -237,7 +237,14 @@ export function CultTechGame() {
       )}
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
         <header className="flex items-center justify-between gap-3 border-b border-border py-3">
-          <p className="min-w-0 truncate font-ui text-sm font-bold text-foreground">Cult or CEO?</p>
+          <div className="flex items-center gap-2 min-w-0">
+            {started && (
+              <Button size="icon" variant="ghost" onClick={() => setStarted(false)} aria-label="Go home">
+                <Home className="h-4 w-4" />
+              </Button>
+            )}
+            <p className="min-w-0 truncate font-ui text-sm font-bold text-foreground">Cult or CEO?</p>
+          </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <label htmlFor="advanced-mode" className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground">Advanced</label>
