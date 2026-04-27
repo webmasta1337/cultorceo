@@ -5,20 +5,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
   --font-serif: var(--font-quote);
   --font-ui: var(--font-ui);
@@ -81,15 +67,51 @@
   --font-quote: "Playfair Display", Georgia, serif;
   --font-ui: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
   --radius: 0.75rem;
-  --background: oklch(0.05 0.02 260);
-  --foreground: oklch(0.98 0.01 260);
-  --card: oklch(0.08 0.02 260 / 50%);
-  --primary: oklch(0.7 0.25 260);
-  --secondary: oklch(0.12 0.04 260);
-  --border: oklch(1 0 0 / 10%);
-  --shadow-ritual: 0 0 100px -20px oklch(0.7 0.25 260 / 30%);
-  --shadow-cult: 0 0 40px oklch(0.6 0.3 15 / 40%);
-  --shadow-tech: 0 0 40px oklch(0.7 0.25 260 / 40%);
+  --background: oklch(0.09 0.045 312);
+  --foreground: oklch(0.96 0.018 300);
+  --card: oklch(0.15 0.048 306 / 86%);
+  --card-foreground: oklch(0.96 0.018 300);
+  --popover: oklch(0.13 0.04 305);
+  --popover-foreground: oklch(0.96 0.018 300);
+  --primary: oklch(0.62 0.22 260);
+  --primary-foreground: oklch(0.98 0.01 260);
+  --secondary: oklch(0.2 0.05 305 / 72%);
+  --secondary-foreground: oklch(0.96 0.018 300);
+  --muted: oklch(0.24 0.045 306);
+  --muted-foreground: oklch(0.78 0.045 300);
+  --accent: oklch(0.56 0.24 15);
+  --accent-foreground: oklch(0.98 0.012 15);
+  --destructive: oklch(0.62 0.24 25);
+  --destructive-foreground: oklch(0.98 0.012 25);
+  --border: oklch(0.72 0.09 300 / 22%);
+  --input: oklch(0.72 0.09 300 / 28%);
+  --ring: oklch(0.68 0.21 260);
+  --chart-1: oklch(0.56 0.24 15);
+  --chart-2: oklch(0.62 0.22 260);
+  --chart-3: oklch(0.69 0.18 155);
+  --chart-4: oklch(0.82 0.15 85);
+  --chart-5: oklch(0.7 0.19 330);
+  --sidebar: oklch(0.12 0.04 305);
+  --sidebar-foreground: oklch(0.96 0.018 300);
+  --sidebar-primary: oklch(0.62 0.22 260);
+  --sidebar-primary-foreground: oklch(0.98 0.01 260);
+  --sidebar-accent: oklch(0.2 0.05 305);
+  --sidebar-accent-foreground: oklch(0.96 0.018 300);
+  --sidebar-border: oklch(0.72 0.09 300 / 22%);
+  --sidebar-ring: oklch(0.68 0.21 260);
+  --cult: oklch(0.55 0.23 15);
+  --cult-foreground: oklch(0.98 0.012 15);
+  --tech: oklch(0.62 0.22 260);
+  --tech-foreground: oklch(0.98 0.01 260);
+  --correct: oklch(0.68 0.17 155);
+  --incorrect: oklch(0.62 0.24 25);
+  --ad: oklch(0.1 0.04 306 / 95%);
+  --ad-panel: oklch(0.16 0.045 306 / 72%);
+  --ad-border: oklch(0.68 0.08 300 / 24%);
+  --overlay: oklch(0.06 0.035 306 / 78%);
+  --shadow-ritual: 0 0 50px -10px oklch(0.62 0.22 260 / 50%), 0 0 20px -5px oklch(0.62 0.22 260 / 30%);
+  --shadow-cult: 0 0 40px oklch(0.55 0.23 15 / 50%);
+  --shadow-tech: 0 0 40px oklch(0.62 0.22 260 / 50%);
 }
 
 .dark {
@@ -154,11 +176,14 @@
 
   .quote-card {
     position: relative;
-    border-radius: var(--radius-2xl);
-    background: transparent;
-    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(145deg, oklch(0.16 0.052 306 / 88%), oklch(0.1 0.04 304 / 82%));
+    box-shadow: var(--shadow-ritual);
+    padding: clamp(1.4rem, 5vw, 3.5rem);
     text-align: center;
     transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    animation: floating 6s ease-in-out infinite;
   }
 
   @keyframes floating {
