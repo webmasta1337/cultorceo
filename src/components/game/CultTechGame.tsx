@@ -24,16 +24,19 @@ type RoundResult = {
 
 const vibeSlides = [
   {
-    label: "Can you tell the difference?",
+    label: "TEST YOUR INTUITION",
     quote: "Individual freedom matters less than the collective mission.",
+    action: "CULT OR CEO?"
   },
   {
-    label: "The line is thin",
+    label: "VISIONARY OR VILLAIN?",
     quote: "Humanity must escape its single point of failure.",
+    action: "WHO SAID IT?"
   },
   {
-    label: "Who said it?",
+    label: "THE ASCENSION BEGINS",
     quote: "You have been lied to about what is possible. We are here to show you the truth.",
+    action: "READY TO PLAY?"
   },
 ];
 
@@ -232,17 +235,21 @@ export function CultTechGame() {
               <CarouselContent>
                 {vibeSlides.map((slide) => (
                   <CarouselItem key={slide.label}>
-                    <div className="rounded-lg border border-border bg-card p-5 text-left shadow-ritual">
-                      <p className="font-ui text-xs font-bold uppercase tracking-[0.18em] text-primary">{slide.label}</p>
-                      <p className="mt-3 font-serif text-2xl font-black leading-tight text-foreground sm:text-3xl">
+                    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8 text-center backdrop-blur-md shadow-ritual transition-all hover:border-primary/50">
+                      <div className="absolute -right-4 -top-4 font-serif text-9xl opacity-10 text-primary">“</div>
+                      <p className="font-ui text-[10px] font-bold uppercase tracking-[0.3em] text-primary/80">{slide.label}</p>
+                      <p className="mt-6 font-serif text-2xl font-black leading-tight text-foreground sm:text-4xl">
                         {slide.quote}
                       </p>
+                      <div className="mt-8 inline-block rounded-full border border-primary/30 px-6 py-2 font-ui text-xs font-bold uppercase tracking-widest text-primary animate-pulse">
+                        {slide.action}
+                      </div>
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-2 top-auto -bottom-12 translate-y-0" />
-              <CarouselNext className="right-2 top-auto -bottom-12 translate-y-0" />
+              <CarouselPrevious className="left-2 top-auto -bottom-16 translate-y-0" />
+              <CarouselNext className="right-2 top-auto -bottom-16 translate-y-0" />
             </Carousel>
           </section>
         ) : (
