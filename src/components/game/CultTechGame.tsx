@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
 import { useAdManager } from "@/hooks/useAdManager";
-import { AdBanner } from "./AdBanner";
 import { AdInterstitial } from "./AdInterstitial";
 import { type GameStats, StatsModal } from "./StatsModal";
 
@@ -181,7 +180,7 @@ export function CultTechGame() {
       }
     } catch {
       await navigator.clipboard.writeText(message);
-      setShareStatus("Copied");
+      setShareStatus("Share score");
     }
   }
 
@@ -189,7 +188,7 @@ export function CultTechGame() {
   const badgeClass = currentQuote.source === "cult_leader" ? "bg-cult text-cult-foreground shadow-cult" : "bg-tech text-tech-foreground shadow-tech";
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background pb-28 text-foreground">
+    <main className="relative min-h-screen overflow-hidden bg-background pb-12 text-foreground">
       {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-600/20 mix-blend-color-burn" style={{ animation: 'chapel-pulse 300ms ease' }} />}
       <div className="chapel-particles" aria-hidden="true" />
       {streakPopup >= 3 && (
@@ -333,7 +332,6 @@ export function CultTechGame() {
 
       <StatsModal open={statsOpen} stats={stats} onClose={() => setStatsOpen(false)} />
       <AdInterstitial open={adManager.showInterstitial} onDismiss={adManager.dismissInterstitial} />
-      <AdBanner enabled={adManager.adsEnabled} roundKey={roundIndex + 1} />
     </main>
   );
 }
