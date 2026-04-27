@@ -237,7 +237,7 @@ export function CultTechGame() {
                 <div className="font-serif text-5xl font-black text-primary/40">03</div>
                 <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Survival</h3>
                 <p className="text-base leading-relaxed text-muted-foreground font-medium">
-                  You have 3 strikes. One wrong move and the system catches you. Survive as many rounds as possible and climb the global leaderboards.
+                  You have 3 strikes. One wrong move and the system catches you. Survive as many rounds as possible.
                 </p>
               </div>
             </div>
@@ -245,7 +245,7 @@ export function CultTechGame() {
             <div className="mt-20 w-full max-w-3xl border-t-2 border-border pt-20 text-center">
               <h2 className="font-serif text-4xl font-black text-foreground sm:text-6xl">Why we built this.</h2>
               <p className="mt-8 font-ui text-lg leading-relaxed text-muted-foreground">
-                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship. Test your intuition against the most influential minds in history.
+                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship.
               </p>
               <Button className="mt-14 h-20 px-12 rounded-full bg-primary text-xl font-bold uppercase tracking-wider text-primary-foreground shadow-xl" onClick={startGame}>
                 Start Playing
