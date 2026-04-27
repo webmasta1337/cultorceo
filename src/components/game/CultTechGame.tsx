@@ -93,17 +93,21 @@ export function CultTechGame() {
 
   useEffect(() => {
     if (started) {
-      const script = document.createElement("script");
-      script.src = "https://pl29277251.profitablecpmratenetwork.com/8e/cd/ba/8ecdba7a3998865f790256aeca26ce45.js";
-      script.async = true;
-      document.body.appendChild(script);
+      // Social Bar
+      const socialBar = document.createElement("script");
+      socialBar.src = "https://pl29277162.profitablecpmratenetwork.com/8f/f9/19/8ff9198581ee5dab8604799bccd05656.js";
+      socialBar.async = true;
+      document.body.appendChild(socialBar);
+
+      // Popunder
+      const popunder = document.createElement("script");
+      popunder.src = "https://pl29277251.profitablecpmratenetwork.com/8e/cd/ba/8ecdba7a3998865f790256aeca26ce45.js";
+      popunder.async = true;
+      document.body.appendChild(popunder);
 
       return () => {
-        // Popunder scripts usually shouldn't be removed once loaded as they attach to listeners,
-        // but we can try to clean up the tag itself.
-        if (document.body.contains(script)) {
-          document.body.removeChild(script);
-        }
+        if (document.body.contains(socialBar)) document.body.removeChild(socialBar);
+        if (document.body.contains(popunder)) document.body.removeChild(popunder);
       };
     }
   }, [started]);
