@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Clipboard, Home, Rocket, Share2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
 import { useAdManager } from "@/hooks/useAdManager";
 import { AdInterstitial } from "./AdInterstitial";
@@ -216,52 +215,42 @@ export function CultTechGame() {
         </header>
 
         {!started ? (
-          <section className="flex flex-1 flex-col items-center justify-center py-14 text-center animate-fade-in">
-            <h1 className="max-w-4xl font-serif text-5xl font-black leading-none text-foreground sm:text-7xl lg:text-8xl">
-              Cult or CEO?
-            </h1>
-            <p className="mt-6 max-w-2xl font-ui text-base leading-7 text-muted-foreground sm:text-lg">
-              One wants your eternal soul. The other wants your equity. Can you tell the difference?
-            </p>
-            <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
-              <Button className="h-14 flex-1 text-base" variant="chapel" onClick={startGame}>
-                Play
-              </Button>
-              <Button className="h-14 flex-1 text-base" variant="outline" onClick={() => setStatsOpen(true)}>
-                View stats
-              </Button>
+          <section className="flex flex-1 flex-col items-center justify-center py-10 text-center animate-fade-in">
+            <div className="mb-12 flex flex-col items-center">
+              <h1 className="max-w-4xl font-serif text-6xl font-black leading-none text-foreground sm:text-8xl lg:text-9xl">
+                CULT<span className="text-primary">OR</span>CEO
+              </h1>
+              <p className="mt-4 font-ui text-xs font-bold uppercase tracking-[0.4em] text-primary/60">The definitive intuition test</p>
             </div>
-            <Carousel className="mt-8 w-full max-w-xl" opts={{ loop: true }}>
-              <CarouselContent>
-                {vibeSlides.map((slide) => (
-                  <CarouselItem key={slide.label}>
-                    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-8 text-center backdrop-blur-md shadow-ritual transition-all hover:border-primary/50">
-                      <div className="absolute -right-4 -top-4 font-serif text-9xl opacity-10 text-primary">“</div>
-                      <p className="font-ui text-[10px] font-bold uppercase tracking-[0.3em] text-primary/80">{slide.label}</p>
-                      <p className="mt-6 font-serif text-2xl font-black leading-tight text-foreground sm:text-4xl">
-                        {slide.quote}
-                      </p>
-                      <div className="mt-8 inline-block rounded-full border border-primary/30 px-6 py-2 font-ui text-xs font-bold uppercase tracking-widest text-primary animate-pulse">
-                        {slide.action}
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2 top-auto -bottom-16 translate-y-0" />
-              <CarouselNext className="right-2 top-auto -bottom-16 translate-y-0" />
-            </Carousel>
+            
+            <div className="relative mb-16 w-full max-w-2xl px-4">
+              <div className="absolute -left-4 -top-8 font-serif text-8xl opacity-10 text-primary">“</div>
+              <p className="font-serif text-2xl font-black leading-tight text-foreground sm:text-4xl italic">
+                {vibeSlides[0].quote}
+              </p>
+            </div>
+
+            <div className="flex w-full max-w-sm flex-col gap-4">
+              <Button className="h-20 w-full rounded-full bg-primary text-xl font-black uppercase tracking-widest text-primary-foreground shadow-ritual transition-transform hover:scale-105 active:scale-95" onClick={startGame}>
+                Play Game
+              </Button>
+              <button onClick={() => setStatsOpen(true)} className="font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                View Lifetime Stats
+              </button>
+            </div>
           </section>
         ) : (
           <section className="flex flex-1 flex-col justify-center py-8 animate-fade-in">
             <h1 className="sr-only">Cult or CEO? Gameplay</h1>
-            <div className="mb-5 flex items-center justify-between gap-3 font-ui text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            <div className="mb-8 flex items-center justify-between gap-3 font-ui text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
               <span>Streak {stats.streak}</span>
-              <div className="flex gap-1 items-center">
-                <span>Strikes:</span>
-                {[1, 2, 3].map((i) => (
-                  <span key={i} className={`text-lg ${i <= strikes ? "text-red-500 font-bold" : "text-muted opacity-30"}`}>X</span>
-                ))}
+              <div className="flex gap-2 items-center">
+                <span>Strikes</span>
+                <div className="flex gap-1.5">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className={`h-2 w-2 rounded-full border ${i <= strikes ? "bg-red-500 border-red-500 shadow-[0_0_10px_oklch(0.62_0.24_25)]" : "border-muted opacity-30"}`} />
+                  ))}
+                </div>
               </div>
             </div>
             <div className="mb-6 grid grid-cols-10 gap-1.5" aria-label="Round progress">
@@ -270,74 +259,62 @@ export function CultTechGame() {
               ))}
             </div>
 
-            <article className={`quote-card ${answerClass}`}>
+            <article className={`quote-card min-h-[40vh] flex flex-col justify-center items-center ${answerClass}`}>
               {result?.isCorrect && (
                 <div className="correct-burst" aria-live="polite">
-                  <span>Correct!</span>
+                  <span>Correct</span>
                 </div>
               )}
-              <p className="font-ui text-xs uppercase tracking-[0.32em] text-muted-foreground">Quote #{currentQuote.id}</p>
-              <blockquote className="mt-6 font-serif text-4xl font-black leading-tight text-foreground sm:text-5xl lg:text-6xl">
+              <blockquote className="font-serif text-4xl font-black leading-tight text-foreground sm:text-6xl lg:text-7xl italic">
                 “{currentQuote.quote}”
               </blockquote>
             </article>
 
             {!result ? (
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Button className="h-16 text-base sm:text-lg" variant="cult" onClick={() => answer("cult_leader")}>
-                  <span aria-hidden="true">🕯️</span> Cult Leader
+              <div className="mt-12 grid gap-4 sm:grid-cols-2">
+                <Button className="h-24 text-xl font-black uppercase tracking-widest rounded-2xl bg-white text-black hover:bg-white/90 transition-all active:scale-95" onClick={() => answer("cult_leader")}>
+                  Cult Leader
                 </Button>
-                <Button className="h-16 text-base sm:text-lg" variant="tech" onClick={() => answer("ceo")}>
-                  <Rocket /> CEO
+                <Button className="h-24 text-xl font-black uppercase tracking-widest rounded-2xl bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95" onClick={() => answer("ceo")}>
+                  CEO
                 </Button>
               </div>
             ) : (
-              <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-ritual animate-glitch-in">
-                <div className="grid gap-5 sm:grid-cols-[9rem_1fr] sm:items-start">
-                  <figure className="speaker-frame overflow-hidden rounded-lg border border-border bg-secondary">
-                    <img
-                      src={currentHeadshot.src}
-                      alt={currentHeadshot.alt}
-                      className="speaker-headshot aspect-square w-full object-cover grayscale"
-                      loading="eager"
-                      decoding="async"
-                      fetchPriority="high"
-                    />
-                    <figcaption className="px-3 py-2 font-ui text-[0.62rem] uppercase tracking-[0.16em] text-muted-foreground">
-                      Verified: {currentHeadshot.source}
-                    </figcaption>
-                  </figure>
+              <div className="mt-12 flex flex-col items-center animate-glitch-in text-center">
+                <div className="mb-8 flex flex-col items-center gap-6 sm:flex-row sm:text-left">
+                  <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-primary shadow-ritual">
+                    <img src={quoteHeadshots[currentQuote.id].src} alt={quoteHeadshots[currentQuote.id].alt} className="h-full w-full object-cover" />
+                  </div>
                   <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className={`rounded-full px-4 py-2 font-ui text-xs font-bold uppercase tracking-[0.2em] ${badgeClass}`}>
-                    {sourceLabel(currentQuote.source)}
-                  </span>
-                  <span className="font-serif text-2xl font-black leading-tight text-foreground sm:text-3xl">{currentQuote.attribution}</span>
-                </div>
-                <p className="mt-4 font-ui text-base leading-7 text-muted-foreground">{currentQuote.reveal}</p>
+                    <p className={`font-ui text-[10px] font-bold uppercase tracking-[0.4em] ${result.isCorrect ? "text-correct" : "text-red-500"}`}>
+                      {result.isCorrect ? "Direct Hit" : "System Failure"}
+                    </p>
+                    <h2 className="mt-2 font-serif text-3xl font-black text-foreground sm:text-4xl">{currentQuote.attribution}</h2>
                   </div>
                 </div>
-                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                
+                <p className="max-w-xl font-ui text-sm leading-relaxed text-muted-foreground/80">
+                  {currentQuote.reveal}
+                </p>
+
+                <div className="mt-12 flex w-full max-w-sm flex-col gap-4">
                   {!gameOver ? (
-                    <Button className="h-12" variant="chapel" onClick={nextRound}>
-                      Next Quote
+                    <Button className="h-20 w-full rounded-full bg-primary text-xl font-black uppercase tracking-widest text-primary-foreground shadow-ritual transition-transform hover:scale-105 active:scale-95" onClick={nextRound}>
+                      Next Round
                     </Button>
                   ) : (
-                    <Button className="h-12" variant="chapel" onClick={startGame}>
-                      Play Again
-                    </Button>
+                    <div className="flex flex-col gap-4">
+                      <h2 className="font-serif text-4xl font-black text-red-500 animate-pulse">GAME OVER</h2>
+                      <p className="font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground">You survived {roundIndex} rounds</p>
+                      <Button className="h-20 w-full rounded-full bg-red-600 text-xl font-black uppercase tracking-widest text-white shadow-ritual" onClick={startGame}>
+                        Try Again
+                      </Button>
+                    </div>
                   )}
-                  <Button className="h-12" variant="outline" onClick={shareScore}>
-                    {shareStatus === "Copied" ? <Clipboard /> : <Share2 />} {shareStatus}
-                  </Button>
+                  <button onClick={shareScore} className="flex items-center justify-center gap-2 font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+                    {shareStatus === "Copied" ? <Clipboard className="h-3 w-3" /> : <Share2 className="h-3 w-3" />} {shareStatus}
+                  </button>
                 </div>
-              </div>
-            )}
-            
-            {gameOver && (
-              <div className="mt-6 text-center animate-fade-in">
-                <h2 className="font-serif text-3xl font-black text-red-500">GAME OVER</h2>
-                <p className="mt-2 text-muted-foreground">You survived {roundIndex} rounds. They caught on to you.</p>
               </div>
             )}
           </section>
