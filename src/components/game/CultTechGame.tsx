@@ -92,16 +92,8 @@ export function CultTechGame() {
   }, []);
 
   useEffect(() => {
-    if (started) {
-      // Social Bar
-      const socialBar = document.createElement("script");
-      socialBar.src = "https://pl29277162.profitablecpmratenetwork.com/8f/f9/19/8ff9198581ee5dab8604799bccd05656.js";
-      socialBar.async = true;
-      document.body.appendChild(socialBar);
-
-      return () => {
-        if (document.body.contains(socialBar)) document.body.removeChild(socialBar);
-      };
+    if (started && typeof window !== "undefined" && (window as any).loadSocialBar) {
+      (window as any).loadSocialBar();
     }
   }, [started]);
 
