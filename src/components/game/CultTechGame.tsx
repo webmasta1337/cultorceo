@@ -66,7 +66,6 @@ export function CultTechGame() {
   const [dailyGuesses, setDailyGuesses] = useState(0);
   const [statsOpen, setStatsOpen] = useState(false);
   const [shareStatus, setShareStatus] = useState("Share score");
-  const [streakPopup, setStreakPopup] = useState(0);
   const [strikes, setStrikes] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [showDamage, setShowDamage] = useState(false);
@@ -113,11 +112,6 @@ export function CultTechGame() {
     setResult({ guess, isCorrect });
     setStats((current) => {
       const nextStreak = isCorrect ? current.streak + 1 : 0;
-      if (nextStreak >= 3) {
-        setStreakPopup(nextStreak);
-      } else if (!isCorrect) {
-        setStreakPopup(0);
-      }
       return {
         streak: nextStreak,
         bestStreak: Math.max(current.bestStreak, nextStreak),
@@ -174,12 +168,6 @@ export function CultTechGame() {
     <main className="relative min-h-screen bg-background pb-12 text-foreground">
       {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-600/20 mix-blend-color-burn" style={{ animation: 'chapel-pulse 300ms ease' }} />}
       <div className="chapel-particles" aria-hidden="true" />
-      {streakPopup >= 3 && (
-        <aside className="streak-toast" aria-live="polite">
-          <span className="streak-toast__label">Streak</span>
-          <strong>{streakPopup} correct</strong>
-        </aside>
-      )}
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
         <header className="flex items-center justify-between gap-3 border-b border-border py-3">
           <div className="flex items-center gap-2 min-w-0">
@@ -271,7 +259,9 @@ export function CultTechGame() {
           <section className="flex flex-1 flex-col justify-center py-8 animate-fade-in">
             <h1 className="sr-only">Cult or CEO? Gameplay</h1>
             <div className="mb-5 flex items-center justify-between gap-3 font-ui text-xs uppercase tracking-[0.18em] text-muted-foreground">
-              <span>Streak {stats.streak}</span>
+              <span className={`transition-all duration-300 ${stats.streak >= 7 ? "streak-on-inferno" : stats.streak >= 3 ? "streak-on-fire" : ""}`}>
+                Streak {stats.streak} {stats.streak >= 3 && "🔥"}
+              </span>
               <div className="flex gap-1 items-center">
                 <span>Strikes:</span>
                 {[1, 2, 3].map((i) => (
