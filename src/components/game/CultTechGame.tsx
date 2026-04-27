@@ -190,7 +190,7 @@ export function CultTechGame() {
   const badgeClass = currentQuote.source === "cult_leader" ? "bg-cult text-cult-foreground shadow-cult" : "bg-tech text-tech-foreground shadow-tech";
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-background pb-12 text-foreground">
+    <main className="relative min-h-screen bg-background pb-12 text-foreground">
       {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-600/20 mix-blend-color-burn" style={{ animation: 'chapel-pulse 300ms ease' }} />}
       <div className="chapel-particles" aria-hidden="true" />
       {streakPopup >= 3 && (
@@ -234,9 +234,48 @@ export function CultTechGame() {
               <Button className="h-20 w-full rounded-full bg-primary text-xl font-black uppercase tracking-widest text-primary-foreground shadow-ritual transition-transform hover:scale-105 active:scale-95" onClick={startGame}>
                 Play Game
               </Button>
-              <button onClick={() => setStatsOpen(true)} className="font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">
+              <button onClick={() => setStatsOpen(true)} className="font-ui text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-colors">
                 View Lifetime Stats
               </button>
+            </div>
+
+            <div className="mt-24 flex animate-bounce flex-col items-center gap-2 text-muted-foreground/40">
+              <span className="font-ui text-[10px] font-bold uppercase tracking-[0.3em]">How it works</span>
+              <div className="h-1 w-1 rounded-full bg-current" />
+            </div>
+
+            <div className="mt-32 grid w-full max-w-4xl gap-16 px-4 pb-20 text-left sm:grid-cols-3">
+              <div className="flex flex-col gap-4">
+                <div className="font-serif text-4xl font-black text-primary">01</div>
+                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Challenge</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  We’ve collected 60+ verified quotes from the world's most powerful tech moguls and most notorious cult leaders. Your job is to tell them apart.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                <div className="font-serif text-4xl font-black text-primary">02</div>
+                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Choice</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Visionary leadership or high-control rhetoric? When the language of "disruption" meets the language of "transcendence," the line disappears.
+                </p>
+              </div>
+              <div className="flex flex-col gap-4">
+                <div className="font-serif text-4xl font-black text-primary">03</div>
+                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Survival</h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  You have 3 strikes. One wrong move and the system catches you. Survive as many rounds as possible and climb the global leaderboards.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-20 w-full max-w-2xl border-t border-border pt-20 text-center">
+              <h2 className="font-serif text-3xl font-black text-foreground sm:text-5xl">Why we built this.</h2>
+              <p className="mt-6 font-ui text-sm leading-relaxed text-muted-foreground/80">
+                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship. Test your intuition against the most influential (and dangerous) minds in history.
+              </p>
+              <Button className="mt-12 h-16 px-10 rounded-full bg-primary text-sm font-black uppercase tracking-widest text-primary-foreground shadow-ritual" onClick={startGame}>
+                Begin Your Ascension
+              </Button>
             </div>
           </section>
         ) : (
