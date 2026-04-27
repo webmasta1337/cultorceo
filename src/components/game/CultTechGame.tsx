@@ -92,6 +92,23 @@ export function CultTechGame() {
   }, []);
 
   useEffect(() => {
+    if (started) {
+      const script = document.createElement("script");
+      script.src = "https://pl29277251.profitablecpmratenetwork.com/8e/cd/ba/8ecdba7a3998865f790256aeca26ce45.js";
+      script.async = true;
+      document.body.appendChild(script);
+
+      return () => {
+        // Popunder scripts usually shouldn't be removed once loaded as they attach to listeners,
+        // but we can try to clean up the tag itself.
+        if (document.body.contains(script)) {
+          document.body.removeChild(script);
+        }
+      };
+    }
+  }, [started]);
+
+  useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
   }, [stats]);
 
