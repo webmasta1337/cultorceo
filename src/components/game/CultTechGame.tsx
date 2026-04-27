@@ -27,6 +27,7 @@ export function CultTechGame() {
   const [strikes, setStrikes] = useState(0);
   const [showReveal, setShowReveal] = useState(false);
   const [isNudging, setIsNudging] = useState(false);
+  const [flash, setFlash] = useState<"success" | "error" | null>(null);
 
 
   const currentQuote = useMemo(() => quoteOrder[roundIndex % quoteOrder.length], [quoteOrder, roundIndex]);
@@ -87,6 +88,9 @@ export function CultTechGame() {
     }
 
     setIsNudging(false);
+    setFlash(isCorrect ? "success" : "error");
+    setTimeout(() => setFlash(null), 500);
+
     setGameState("revealing");
     setShowReveal(false);
     setTimeout(() => setShowReveal(true), 100);
@@ -112,6 +116,9 @@ export function CultTechGame() {
   return (
     <main className="relative min-h-screen selection:bg-ritual-red selection:text-white overflow-hidden">
       <div className="duality-bg" />
+      
+      {flash === "success" && <div className="flash-overlay-success" />}
+      {flash === "error" && <div className="flash-overlay-error" />}
       
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 flex flex-col min-h-screen">
         <header className="mb-8 flex items-center justify-between">
@@ -241,13 +248,17 @@ export function CultTechGame() {
               </div>
             </div>
             
-            <p className={`mb-4 font-ui text-xs font-bold uppercase tracking-[0.6em] ${result?.isCorrect ? "text-glitch-green" : "text-ritual-red"}`}>
-              {result?.isCorrect ? "VERIFICATION SUCCESSFUL" : "JUDGMENT ERROR"}
-            </p>
+            <div className={`mb-6 inline-block px-8 py-2 font-ui text-xs font-black uppercase tracking-[0.8em] border-2 ${result?.isCorrect ? "border-glitch-green text-glitch-green bg-glitch-green/10" : "border-ritual-red text-ritual-red bg-ritual-red/10"}`}>
+              {result?.isCorrect ? "VERIFICATION SUCCESSFUL" : "COGNITIVE DISSONANCE"}
+            </div>
             
             <h2 className="mb-8 font-serif text-5xl font-black text-white sm:text-7xl uppercase tracking-tighter">
-              {currentQuote.attribution}
+              {result?.isCorrect ? "CORRECT" : "INCORRECT"}
             </h2>
+            
+            <div className="mb-4 font-ui text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">
+              SPOKEN BY {currentQuote.attribution}
+            </div>
             
             <div className="mx-auto max-w-2xl ceo-glass p-10 border-t-4 border-gold mb-16 relative">
               <Sparkles className="absolute -top-3 -left-3 h-6 w-6 text-gold" />
