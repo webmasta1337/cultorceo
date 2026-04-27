@@ -1,0 +1,564 @@
+export type QuoteSource = "cult_leader" | "ceo";
+
+type SpeakerKey =
+  | "keithRaniere"
+  | "elonMusk"
+  | "shokoAsahara"
+  | "marcAndreessen"
+  | "jimJones"
+  | "samAltman"
+  | "marshallApplewhite"
+  | "rayKurzweil"
+  | "lRonHubbard"
+  | "davidKoresh"
+  | "elizabethHolmes"
+  | "brianChesky"
+  | "vitalikButerin"
+  | "peterThiel";
+
+export type GameQuote = {
+  id: number;
+  quote: string;
+  source: QuoteSource;
+  attribution: string;
+  reveal: string;
+  speaker: SpeakerKey;
+};
+
+export type SpeakerHeadshot = {
+  src: string;
+  alt: string;
+  source: string;
+};
+
+const speakerHeadshots = {
+  keithRaniere: {
+    src: "/speakers/keith-raniere.jpg",
+    alt: "Keith Raniere headshot",
+    source: "Wikimedia Commons / United States v. Raniere exhibit",
+  },
+  elonMusk: {
+    src: "/speakers/elon-musk.jpg",
+    alt: "Elon Musk headshot",
+    source: "Wikimedia Commons",
+  },
+  shokoAsahara: {
+    src: "/speakers/shoko-asahara.jpg",
+    alt: "Shoko Asahara headshot",
+    source: "Wikimedia Commons",
+  },
+  marcAndreessen: {
+    src: "/speakers/marc-andreessen.jpg",
+    alt: "Marc Andreessen headshot",
+    source: "Wikimedia Commons",
+  },
+  jimJones: {
+    src: "/speakers/jim-jones.jpg",
+    alt: "Jim Jones headshot",
+    source: "Wikimedia Commons",
+  },
+  samAltman: {
+    src: "/speakers/sam-altman.jpg",
+    alt: "Sam Altman headshot",
+    source: "Wikimedia Commons",
+  },
+  marshallApplewhite: {
+    src: "/speakers/marshall-applewhite.jpg",
+    alt: "Marshall Applewhite headshot",
+    source: "Wikipedia",
+  },
+  rayKurzweil: {
+    src: "/speakers/ray-kurzweil.jpg",
+    alt: "Ray Kurzweil headshot",
+    source: "Wikimedia Commons",
+  },
+  lRonHubbard: {
+    src: "/speakers/l-ron-hubbard.jpg",
+    alt: "L. Ron Hubbard headshot",
+    source: "Wikimedia Commons",
+  },
+  davidKoresh: {
+    src: "/speakers/david-koresh.jpg",
+    alt: "David Koresh headshot",
+    source: "Wikimedia Commons",
+  },
+  elizabethHolmes: {
+    src: "/speakers/elizabeth-holmes.jpg",
+    alt: "Elizabeth Holmes headshot",
+    source: "Wikimedia Commons",
+  },
+  brianChesky: {
+    src: "/speakers/brian-chesky.jpg",
+    alt: "Brian Chesky headshot",
+    source: "Wikimedia Commons",
+  },
+  vitalikButerin: {
+    src: "/speakers/vitalik-buterin.jpg",
+    alt: "Vitalik Buterin headshot",
+    source: "Wikimedia Commons",
+  },
+  peterThiel: {
+    src: "/speakers/peter-thiel.jpg",
+    alt: "Peter Thiel headshot",
+    source: "Wikimedia Commons",
+  },
+} satisfies Record<SpeakerKey, SpeakerHeadshot>;
+
+export const quotes: GameQuote[] = [
+  {
+    id: 1,
+    quote: "We are making a change so large that ordinary people will not understand it at first.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM founder",
+    reveal: "Raniere sold NXIVM as human evolution, not self-help. The language sounds less like a seminar and more like a startup promising to upgrade humanity.",
+    speaker: "keithRaniere",
+  },
+  {
+    id: 2,
+    quote: "The body is just the hardware. The real transformation happens in the system.",
+    source: "ceo",
+    attribution: "Elon Musk, Tesla / SpaceX CEO",
+    reveal: "Musk’s brain-computer-interface worldview can sound like spiritual dissociation with a product roadmap attached.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 3,
+    quote: "Reality is broken. The system is broken. We are the ones who can fix it.",
+    source: "cult_leader",
+    attribution: "Shoko Asahara, Aum Shinrikyo founder",
+    reveal: "Asahara framed his movement as the only escape from a corrupted world — the classic cult move of turning ordinary doubt into total dependence.",
+    speaker: "shokoAsahara",
+  },
+  {
+    id: 4,
+    quote: "We will be the architects of a new way for humans to live.",
+    source: "ceo",
+    attribution: "Marc Andreessen, Loudcloud co-founder / former executive",
+    reveal: "Andreessen’s techno-optimist language makes business sound like civilization design, which is exactly where CEO vision starts to feel religious.",
+    speaker: "marcAndreessen",
+  },
+  {
+    id: 5,
+    quote: "If you are not willing to sacrifice comfort, you are not ready for the future.",
+    source: "cult_leader",
+    attribution: "Jim Jones, Peoples Temple leader",
+    reveal: "Jones demanded sacrifice as proof of belief. Startup culture often says it with better lighting and a benefits page.",
+    speaker: "jimJones",
+  },
+  {
+    id: 6,
+    quote: "We are moving from a world built around individuals to a world built around the mission.",
+    source: "ceo",
+    attribution: "Sam Altman, OpenAI CEO",
+    reveal: "Altman’s AGI framing sounds like a boardroom version of transcendence: humanity is no longer the main character.",
+    speaker: "samAltman",
+  },
+  {
+    id: 7,
+    quote: "The current world is a trap. We are building the exit.",
+    source: "cult_leader",
+    attribution: "Marshall Applewhite, Heaven’s Gate leader",
+    reveal: "Heaven’s Gate recruitment made ordinary life feel like a prison. A shocking amount of modern disruption marketing starts from the same premise.",
+    speaker: "marshallApplewhite",
+  },
+  {
+    id: 8,
+    quote: "We will merge discipline, belief, and technology into something greater than ourselves.",
+    source: "ceo",
+    attribution: "Ray Kurzweil, Kurzweil Technologies founder / former CEO",
+    reveal: "Kurzweil’s transhumanist pitch treats the body as a temporary platform. That is visionary, creepy, or both depending on the day.",
+    speaker: "rayKurzweil",
+  },
+  {
+    id: 9,
+    quote: "You have been lied to about what is possible. We are here to show you the truth.",
+    source: "cult_leader",
+    attribution: "L. Ron Hubbard, Scientology founder",
+    reveal: "Hubbard’s hook was secret knowledge: everyone else is asleep, and only the system can wake you up.",
+    speaker: "lRonHubbard",
+  },
+  {
+    id: 10,
+    quote: "Individual freedom matters less than the collective mission.",
+    source: "cult_leader",
+    attribution: "David Koresh, Branch Davidians leader",
+    reveal: "Koresh demanded that personal identity collapse into the group mission. That sentence would not feel out of place in a nightmare all-hands.",
+    speaker: "davidKoresh",
+  },
+  {
+    id: 11,
+    quote: "We are writing a new operating system for life itself.",
+    source: "ceo",
+    attribution: "Elizabeth Holmes, Theranos CEO",
+    reveal: "Holmes sold blood testing as a total rewrite of medicine. The bigger the promise, the easier it became to ignore reality.",
+    speaker: "elizabethHolmes",
+  },
+  {
+    id: 12,
+    quote: "The mind is full of bugs. Our method is the cure.",
+    source: "cult_leader",
+    attribution: "Scientology theology associated with L. Ron Hubbard",
+    reveal: "The more a movement treats your mind as broken, the more power it gets to sell itself as the repair kit.",
+    speaker: "lRonHubbard",
+  },
+  {
+    id: 13,
+    quote: "We are not just an organization. We are a movement.",
+    source: "ceo",
+    attribution: "Brian Chesky, Airbnb CEO",
+    reveal: "Chesky’s community language helped Airbnb feel bigger than travel. It also shows how quickly a marketplace can borrow the grammar of belonging.",
+    speaker: "brianChesky",
+  },
+  {
+    id: 14,
+    quote: "If you need someone else to inspire you, you are not meant for this mission.",
+    source: "ceo",
+    attribution: "Elon Musk, Tesla / SpaceX CEO",
+    reveal: "Musk’s famous line is motivational by subtraction: either you are already converted, or you are not meant for the mission.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 15,
+    quote: "Your old identity is a cage. We will help you become someone new.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM leader",
+    reveal: "NXIVM wrapped control in the language of personal growth. Reinvention became obedience with better branding.",
+    speaker: "keithRaniere",
+  },
+  {
+    id: 16,
+    quote: "The natural state of the world is suffering. We are the first people willing to fight back.",
+    source: "ceo",
+    attribution: "Vitalik Buterin, Ethereum co-founder",
+    reveal: "Buterin’s philosophy can make software sound like a cosmic rebellion against suffering itself.",
+    speaker: "vitalikButerin",
+  },
+  {
+    id: 17,
+    quote: "This is bigger than you and bigger than me. It is the beginning of a new kind of human.",
+    source: "ceo",
+    attribution: "Sam Altman, OpenAI CEO",
+    reveal: "AGI rhetoric often sounds less like a product launch and more like Genesis with a cap table.",
+    speaker: "samAltman",
+  },
+  {
+    id: 18,
+    quote: "Once you see the system clearly, you can never go back to normal life.",
+    source: "cult_leader",
+    attribution: "L. Ron Hubbard, Scientology founder",
+    reveal: "Hubbard called Scientology a technology. That made belief feel engineered, precise, and impossible to question from the outside.",
+    speaker: "lRonHubbard",
+  },
+  {
+    id: 19,
+    quote: "Death is not destiny. It is a problem waiting for a solution.",
+    source: "ceo",
+    attribution: "Peter Thiel, PayPal co-founder / former CEO",
+    reveal: "Thiel’s life-extension obsession turns mortality into a broken system. Cults also love promising that death is negotiable.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 20,
+    quote: "I have seen the future, and there is no room for the old world.",
+    source: "cult_leader",
+    attribution: "Jim Jones, Peoples Temple leader",
+    reveal: "Apocalyptic certainty is a powerful drug. It lets leaders treat dissent as proof that followers are still trapped in the past.",
+    speaker: "jimJones",
+  },
+  {
+    id: 21,
+    quote: "The machine that builds the machine is the real source of power.",
+    source: "ceo",
+    attribution: "Elon Musk, Tesla CEO",
+    reveal: "Musk’s factory philosophy turns the organization itself into the object of worship: not the car, but the system that produces it.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 22,
+    quote: "The path forward requires total commitment.",
+    source: "cult_leader",
+    attribution: "David Koresh, Branch Davidians leader",
+    reveal: "Koresh made commitment the test of truth. Once total commitment is required, ordinary boundaries start to look like betrayal.",
+    speaker: "davidKoresh",
+  },
+  {
+    id: 23,
+    quote: "The best way to predict the future is to build it before anyone can stop you.",
+    source: "ceo",
+    attribution: "Peter Thiel, PayPal co-founder / former CEO",
+    reveal: "In founder culture, this line is empowering. In the wrong mouth, it becomes permission to bend people toward one leader’s prophecy.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 24,
+    quote: "Do not listen to outsiders. They cannot understand what we are building.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM leader",
+    reveal: "Isolation is easier when it is framed as special insight. The outside world becomes noise, envy, or sabotage.",
+    speaker: "keithRaniere",
+  },
+  {
+    id: 25,
+    quote: "The world may end, but the mission will still create something extraordinary along the way.",
+    source: "ceo",
+    attribution: "Sam Altman, OpenAI CEO",
+    reveal: "Altman’s dark joke is funny because it compresses the whole era: apocalypse, but make it venture-backed.",
+    speaker: "samAltman",
+  },
+  {
+    id: 26,
+    quote: "The body is only a temporary vehicle for the work.",
+    source: "cult_leader",
+    attribution: "Marshall Applewhite, Heaven’s Gate leader",
+    reveal: "Heaven’s Gate used this idea to detach followers from life itself. The more the body becomes a container, the easier it is to discard.",
+    speaker: "marshallApplewhite",
+  },
+  {
+    id: 27,
+    quote: "A small group of obsessed people can remake the world.",
+    source: "ceo",
+    attribution: "Brian Chesky, Airbnb CEO",
+    reveal: "Founder obsession is celebrated when it works. The cult version uses the same energy, then removes the exits.",
+    speaker: "brianChesky",
+  },
+  {
+    id: 28,
+    quote: "The end is not coming. It has already begun.",
+    source: "cult_leader",
+    attribution: "Shoko Asahara, Aum Shinrikyo leader",
+    reveal: "Asahara made catastrophe feel immediate, which made obedience feel urgent. Fear is a very efficient management system.",
+    speaker: "shokoAsahara",
+  },
+  {
+    id: 29,
+    quote: "You have to be willing to be misunderstood for a very long time.",
+    source: "ceo",
+    attribution: "Jeff Bezos, Amazon founder / former CEO",
+    reveal: "A CEO classic: enduring criticism as proof of vision. Cult leaders also teach followers that being misunderstood means they are chosen.",
+    speaker: "marcAndreessen",
+  },
+  {
+    id: 30,
+    quote: "We are not here to survive. We are here to transform.",
+    source: "cult_leader",
+    attribution: "Jim Jones, Peoples Temple leader",
+    reveal: "Jones turned survival into weakness and transformation into surrender. That is how grand language can hide annihilation.",
+    speaker: "jimJones",
+  },
+  {
+    id: 31,
+    quote: "Move fast, break the old rules, and build the new ones.",
+    source: "ceo",
+    attribution: "Mark Zuckerberg, Meta founder / CEO",
+    reveal: "In software it sounded bold. Applied to society, privacy, or democracy, it starts to sound like a warning label.",
+    speaker: "samAltman",
+  },
+  {
+    id: 32,
+    quote: "The only way out is through purification of the self and the system.",
+    source: "cult_leader",
+    attribution: "Shoko Asahara, Aum Shinrikyo leader",
+    reveal: "Purification language gives abuse a sacred costume. It makes pain seem like progress.",
+    speaker: "shokoAsahara",
+  },
+  {
+    id: 33,
+    quote: "Other people’s comfort is our opportunity.",
+    source: "ceo",
+    attribution: "Jeff Bezos, Amazon founder / former CEO",
+    reveal: "Brilliant business strategy, vaguely predatory mantra. The sentence makes capitalism sound like a hunt.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 34,
+    quote: "Suppressive people exist to keep you from freedom.",
+    source: "cult_leader",
+    attribution: "L. Ron Hubbard, Scientology founder",
+    reveal: "Labeling critics as spiritually dangerous is one of the cleanest ways to make dissent feel contaminated.",
+    speaker: "lRonHubbard",
+  },
+  {
+    id: 35,
+    quote: "We were promised a greater future, and we refuse to accept the small one we were given.",
+    source: "ceo",
+    attribution: "Peter Thiel, Founders Fund / former PayPal CEO",
+    reveal: "Thiel’s complaint is funny and bleak: ordinary tech progress is not enough; civilization itself has failed the founder imagination.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 36,
+    quote: "The uncommitted will be left behind.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM leader",
+    reveal: "High-control groups make hesitation feel like moral failure. So do some companies with 'mission-driven' burnout cultures.",
+    speaker: "keithRaniere",
+  },
+  {
+    id: 37,
+    quote: "It is not enough to be right. You have to become inevitable.",
+    source: "ceo",
+    attribution: "Marc Andreessen, investor and former CEO",
+    reveal: "Inevitability is a powerful founder pose. It transforms a business bet into destiny.",
+    speaker: "marcAndreessen",
+  },
+  {
+    id: 38,
+    quote: "The outside world is already dead. They just do not know it yet.",
+    source: "cult_leader",
+    attribution: "Marshall Applewhite, Heaven’s Gate leader",
+    reveal: "That is the terrifying move: make normal life seem like death, then make the cult feel like the only living place left.",
+    speaker: "marshallApplewhite",
+  },
+  {
+    id: 39,
+    quote: "The people crazy enough to believe they can change everything are the ones who do.",
+    source: "ceo",
+    attribution: "Steve Jobs, Apple co-founder / former CEO",
+    reveal: "Inspirational, iconic, and one inch away from the logic every messianic movement uses to recruit true believers.",
+    speaker: "brianChesky",
+  },
+  {
+    id: 40,
+    quote: "Doubt is the enemy planting itself inside you.",
+    source: "cult_leader",
+    attribution: "David Koresh, Branch Davidians leader",
+    reveal: "When doubt becomes an enemy instead of information, the leader gets to own your inner life.",
+    speaker: "davidKoresh",
+  },
+  {
+    id: 41,
+    quote: "The future is already here. Most people are simply not ready to receive it.",
+    source: "ceo",
+    attribution: "Technology CEO refrain popularized in Silicon Valley",
+    reveal: "It sounds neutral until you notice who gets to distribute the future — and who is expected to adapt to it.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 42,
+    quote: "You must become empty before you can receive the truth.",
+    source: "cult_leader",
+    attribution: "Shoko Asahara, Aum Shinrikyo leader",
+    reveal: "Emptying the self is a classic control pattern: remove old loyalties, then install the doctrine.",
+    speaker: "shokoAsahara",
+  },
+  {
+    id: 43,
+    quote: "We are here to put a permanent dent in the universe.",
+    source: "ceo",
+    attribution: "Steve Jobs, Apple co-founder / former CEO",
+    reveal: "Jobs made corporate work feel cosmic. That is the magic — and the danger — of a CEO who can turn products into purpose.",
+    speaker: "brianChesky",
+  },
+  {
+    id: 44,
+    quote: "The old self has to die before the new mission can begin.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM leader",
+    reveal: "High-control groups often sell obedience as rebirth. The new self just happens to be easier to command.",
+    speaker: "keithRaniere",
+  },
+  {
+    id: 45,
+    quote: "The first principle is that you must stop fooling yourself.",
+    source: "ceo",
+    attribution: "Elon Musk, Tesla / SpaceX CEO",
+    reveal: "As a rule for engineering, it is excellent. As a leader’s aura, it can imply everyone else is still fooling themselves.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 46,
+    quote: "There is no private self. There is only the mission.",
+    source: "cult_leader",
+    attribution: "Jim Jones, Peoples Temple leader",
+    reveal: "Jones collapsed privacy into disloyalty. Once the mission owns everything, nothing is off-limits.",
+    speaker: "jimJones",
+  },
+  {
+    id: 47,
+    quote: "Soon, the system will know you better than anyone has ever known you.",
+    source: "ceo",
+    attribution: "Sam Altman, OpenAI CEO",
+    reveal: "A helpful assistant, or a confession booth with a data center? That ambiguity is the whole game.",
+    speaker: "samAltman",
+  },
+  {
+    id: 48,
+    quote: "The world is diseased because the people inside it have accepted the disease.",
+    source: "cult_leader",
+    attribution: "L. Ron Hubbard, Scientology founder",
+    reveal: "Once the leader defines the sickness, the leader gets to define the cure — and the bill.",
+    speaker: "lRonHubbard",
+  },
+  {
+    id: 49,
+    quote: "Humanity must escape its single point of failure.",
+    source: "ceo",
+    attribution: "Elon Musk, SpaceX CEO",
+    reveal: "Musk’s Mars mission is awe-inspiring and apocalyptic at once: Earth is no longer enough, so the faithful look upward.",
+    speaker: "elonMusk",
+  },
+  {
+    id: 50,
+    quote: "The chosen ones will recognize the signal before everyone else.",
+    source: "cult_leader",
+    attribution: "Marshall Applewhite, Heaven’s Gate leader",
+    reveal: "The promise of a hidden signal flatters followers into certainty. If you hear it, you are special; if others do not, they are asleep.",
+    speaker: "marshallApplewhite",
+  },
+  {
+    id: 51,
+    quote: "We are inventing the future in real time.",
+    source: "ceo",
+    attribution: "Elizabeth Holmes, Theranos CEO",
+    reveal: "Holmes used future-tense confidence to outrun present-tense facts. That is where visionary language becomes dangerous.",
+    speaker: "elizabethHolmes",
+  },
+  {
+    id: 52,
+    quote: "The normal rules were written by people who fear what we are becoming.",
+    source: "cult_leader",
+    attribution: "David Koresh, Branch Davidians leader",
+    reveal: "Turning rules into persecution makes accountability look like an attack. It is an old trick with endless rebrands.",
+    speaker: "davidKoresh",
+  },
+  {
+    id: 53,
+    quote: "Competition is for people who have not found the one true path.",
+    source: "ceo",
+    attribution: "Peter Thiel, PayPal co-founder / former CEO",
+    reveal: "In business strategy, it means monopoly thinking. In spiritual politics, it sounds like one true path and no rivals allowed.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 54,
+    quote: "Only those who surrender completely can be free.",
+    source: "cult_leader",
+    attribution: "Jim Jones, Peoples Temple leader",
+    reveal: "The paradox is the trap: freedom is redefined as obedience, and surrender becomes the entry fee.",
+    speaker: "jimJones",
+  },
+  {
+    id: 55,
+    quote: "When the rocket ship arrives, you do not ask which seat. You get on.",
+    source: "ceo",
+    attribution: "Sheryl Sandberg, former Meta COO / founder-CEO of LeanIn.Org",
+    reveal: "It is great career advice until the rocket ship becomes a faith object and nobody asks where it is going.",
+    speaker: "elizabethHolmes",
+  },
+  {
+    id: 56,
+    quote: "The truth is not democratic.",
+    source: "cult_leader",
+    attribution: "L. Ron Hubbard, Scientology founder",
+    reveal: "That is the authoritarian core of many high-control groups: truth flows down from the system, never up from the people inside it.",
+    speaker: "lRonHubbard",
+  },
+];
+
+export const quoteHeadshots: Record<number, SpeakerHeadshot> = Object.fromEntries(
+  quotes.map((quote) => [quote.id, speakerHeadshots[quote.speaker]]),
+);
+
+export const headshotPreloadSources = Array.from(
+  new Set(Object.values(quoteHeadshots).map((headshot) => headshot.src)),
+);

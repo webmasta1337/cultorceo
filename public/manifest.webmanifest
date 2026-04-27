@@ -1,0 +1,17 @@
+{
+  "name": "Cult or Tech CEO?",
+  "short_name": "Cult or CEO",
+  "description": "A dark quote guessing game about cult leaders and tech CEOs.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0014",
+  "theme_color": "#0B0014",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
