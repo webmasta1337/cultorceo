@@ -1,7 +1,7 @@
 {
-  "name": "Cult or Tech CEO?",
+  "name": "Cult or CEO?",
   "short_name": "Cult or CEO",
-  "description": "A dark quote guessing game about cult leaders and tech CEOs.",
+  "description": "Can you tell a cult leader from a tech CEO? Read the quote, make your call. Play free.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B0014",
