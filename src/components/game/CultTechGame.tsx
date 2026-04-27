@@ -223,72 +223,71 @@ export function CultTechGame() {
             <p className="mt-6 max-w-2xl font-ui text-base leading-7 text-muted-foreground sm:text-lg">
               One wants your eternal soul. The other wants your equity. Can you tell the difference?
             </p>
-            <div className="mt-9 flex w-full max-w-md flex-col gap-3 sm:flex-row">
-              <Button className="h-20 flex-1 text-xl font-black uppercase tracking-widest rounded-2xl bg-primary text-primary-foreground shadow-ritual transition-transform hover:scale-105 active:scale-95" onClick={startGame}>
-                Play
+            <div className="mt-9 flex w-full max-w-md flex-col gap-4 sm:flex-row">
+              <Button className="h-16 flex-1 text-lg font-bold uppercase tracking-wider rounded-xl bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] active:scale-98" onClick={startGame}>
+                Play Game
               </Button>
-              <Button className="h-20 flex-1 text-base rounded-2xl border-border bg-card shadow-ritual" variant="outline" onClick={() => setStatsOpen(true)}>
+              <Button className="h-16 flex-1 text-lg font-bold uppercase tracking-wider rounded-xl border-2 border-border bg-card shadow-lg" variant="outline" onClick={() => setStatsOpen(true)}>
                 Stats
               </Button>
             </div>
             
-            <Carousel className="mt-16 w-full max-w-xl" opts={{ loop: true }}>
+            <Carousel className="mt-20 w-full max-w-xl" opts={{ loop: true }}>
               <CarouselContent>
                 {vibeSlides.map((slide) => (
                   <CarouselItem key={slide.label}>
-                    <div className="group relative overflow-hidden rounded-2xl border border-primary/20 bg-primary/5 p-10 text-center backdrop-blur-sm shadow-ritual transition-all hover:border-primary/50">
-                      <div className="absolute -right-4 -top-4 font-serif text-9xl opacity-5 text-primary">“</div>
-                      <p className="font-ui text-[10px] font-bold uppercase tracking-[0.4em] text-primary">{slide.label}</p>
-                      <p className="mt-6 font-serif text-2xl font-black leading-tight text-foreground sm:text-3xl">
-                        {slide.quote}
+                    <div className="group relative overflow-hidden rounded-3xl border-2 border-primary/20 bg-card p-12 text-center shadow-2xl transition-all">
+                      <p className="font-ui text-xs font-bold uppercase tracking-widest text-primary">{slide.label}</p>
+                      <p className="mt-8 font-serif text-3xl font-bold leading-snug text-foreground sm:text-4xl">
+                        “{slide.quote}”
                       </p>
-                      <div className="mt-10 inline-block rounded-full bg-primary/10 px-6 py-2 font-ui text-[10px] font-bold uppercase tracking-widest text-primary border border-primary/20">
+                      <div className="mt-10 inline-block rounded-full bg-primary/10 px-8 py-3 font-ui text-xs font-black uppercase tracking-widest text-primary border border-primary/20">
                         {slide.action}
                       </div>
                     </div>
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-2 top-auto -bottom-16 translate-y-0" />
-              <CarouselNext className="right-2 top-auto -bottom-16 translate-y-0" />
+              <CarouselPrevious className="hidden sm:flex left-[-3rem]" />
+              <CarouselNext className="hidden sm:flex right-[-3rem]" />
             </Carousel>
 
-            <div className="mt-24 flex animate-bounce flex-col items-center gap-2 text-muted-foreground/40">
-              <span className="font-ui text-[10px] font-bold uppercase tracking-[0.3em]">How it works</span>
-              <div className="h-1 w-1 rounded-full bg-current" />
+            <div className="mt-24 flex flex-col items-center gap-3 text-muted-foreground/60">
+              <span className="font-ui text-xs font-bold uppercase tracking-widest">How it works</span>
+              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
             </div>
 
-            <div className="mt-32 grid w-full max-w-4xl gap-16 px-4 pb-20 text-left sm:grid-cols-3">
-              <div className="flex flex-col gap-4">
-                <div className="font-serif text-4xl font-black text-primary">01</div>
-                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Challenge</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+            <div className="mt-32 grid w-full max-w-4xl gap-12 px-4 pb-20 text-left sm:grid-cols-3">
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">01</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Challenge</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
                   We’ve collected 60+ verified quotes from the world's most powerful tech moguls and most notorious cult leaders. Your job is to tell them apart.
                 </p>
               </div>
-              <div className="flex flex-col gap-4">
-                <div className="font-serif text-4xl font-black text-primary">02</div>
-                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Choice</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">02</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Choice</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
                   Visionary leadership or high-control rhetoric? When the language of "disruption" meets the language of "transcendence," the line disappears.
                 </p>
               </div>
-              <div className="flex flex-col gap-4">
-                <div className="font-serif text-4xl font-black text-primary">03</div>
-                <h3 className="font-ui text-xs font-black uppercase tracking-[0.2em] text-foreground">The Survival</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">03</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Survival</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
                   You have 3 strikes. One wrong move and the system catches you. Survive as many rounds as possible and climb the global leaderboards.
                 </p>
               </div>
             </div>
 
-            <div className="mt-20 w-full max-w-2xl border-t border-border pt-20 text-center">
-              <h2 className="font-serif text-3xl font-black text-foreground sm:text-5xl">Why we built this.</h2>
-              <p className="mt-6 font-ui text-sm leading-relaxed text-muted-foreground/80">
-                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship. Test your intuition against the most influential (and dangerous) minds in history.
+            <div className="mt-20 w-full max-w-3xl border-t-2 border-border pt-20 text-center">
+              <h2 className="font-serif text-4xl font-black text-foreground sm:text-6xl">Why we built this.</h2>
+              <p className="mt-8 font-ui text-lg leading-relaxed text-muted-foreground">
+                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship. Test your intuition against the most influential minds in history.
               </p>
-              <Button className="mt-12 h-16 px-10 rounded-full bg-primary text-sm font-black uppercase tracking-widest text-primary-foreground shadow-ritual" onClick={startGame}>
-                Begin Your Ascension
+              <Button className="mt-14 h-20 px-12 rounded-full bg-primary text-xl font-bold uppercase tracking-wider text-primary-foreground shadow-xl" onClick={startGame}>
+                Start Playing
               </Button>
             </div>
           </section>
@@ -316,8 +315,8 @@ export function CultTechGame() {
                   <span>Correct!</span>
                 </div>
               )}
-              <p className="font-ui text-xs uppercase tracking-[0.32em] text-muted-foreground">Quote #{currentQuote.id}</p>
-              <blockquote className="mt-6 font-serif text-4xl font-black leading-tight text-foreground sm:text-5xl lg:text-6xl italic">
+              <p className="font-ui text-sm font-bold uppercase tracking-widest text-primary/60">Quote #{currentQuote.id}</p>
+              <blockquote className="mt-10 font-serif text-4xl font-bold leading-snug text-foreground sm:text-6xl">
                 “{currentQuote.quote}”
               </blockquote>
             </article>
@@ -344,7 +343,7 @@ export function CultTechGame() {
                       </span>
                       <h2 className="font-serif text-3xl font-black text-foreground">{currentQuote.attribution}</h2>
                     </div>
-                    <p className="mt-4 font-ui text-sm leading-relaxed text-muted-foreground/90">
+                    <p className="mt-4 font-ui text-base font-medium leading-relaxed text-foreground">
                       {currentQuote.reveal}
                     </p>
                   </div>
