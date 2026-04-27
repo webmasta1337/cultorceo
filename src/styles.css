@@ -33,7 +33,6 @@
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    cursor: none; /* We will implement the eye cursor */
     overflow-x: hidden;
   }
 }
@@ -60,27 +59,7 @@
     mask-image: radial-gradient(circle at center, black, transparent 80%);
   }
 
-  /* Custom Eye Cursor */
-  .eye-cursor {
-    position: fixed;
-    width: 24px;
-    height: 24px;
-    background: white;
-    border-radius: 50% 0 50% 0;
-    transform: rotate(45deg);
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: difference;
-    transition: transform 0.1s ease-out, width 0.2s, height 0.2s, border-radius 0.2s;
-  }
 
-  .eye-cursor::after {
-    content: "";
-    position: absolute;
-    inset: 6px;
-    background: black;
-    border-radius: 50%;
-  }
 
   /* Glitch Animations */
   @keyframes glitch-flicker {

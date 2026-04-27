@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from "react";
-import { Clipboard, Home, Rocket, Share2, Trophy, Eye, DollarSign, Loader2, Sparkles, Zap } from "lucide-react";
+import { Clipboard, Home, Rocket, Share2, Trophy, Sparkles, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
 
@@ -25,31 +25,13 @@ export function CultTechGame() {
   const [result, setResult] = useState<RoundResult | null>(null);
   const [stats, setStats] = useState({ streak: 0, bestStreak: 0, cultPoints: 0, ceoPoints: 0 });
   const [strikes, setStrikes] = useState(0);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [cursorPhase, setCursorPhase] = useState<"eye" | "blink" | "dollar">("eye");
   const [showReveal, setShowReveal] = useState(false);
   const [isNudging, setIsNudging] = useState(false);
-  
-  const hesitationTimer = useRef<NodeJS.Timeout | null>(null);
+
 
   const currentQuote = useMemo(() => quoteOrder[roundIndex % quoteOrder.length], [quoteOrder, roundIndex]);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-      resetHesitation();
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
 
-  const resetHesitation = () => {
-    setCursorPhase("eye");
-    if (hesitationTimer.current) clearTimeout(hesitationTimer.current);
-    hesitationTimer.current = setTimeout(() => {
-      if (gameState === "playing") setCursorPhase("dollar");
-    }, 4000);
-  };
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
@@ -131,38 +113,50 @@ export function CultTechGame() {
     <main className="relative min-h-screen selection:bg-ritual-red selection:text-white overflow-hidden">
       <div className="duality-bg" />
       
-      {/* Eye Cursor */}
-      <div 
-        className="eye-cursor hidden lg:block" 
-        style={{ left: mousePos.x - 12, top: mousePos.y - 12 }}
-      >
-        {cursorPhase === "dollar" && <DollarSign className="absolute inset-1 h-4 w-4 text-glitch-green animate-pulse" />}
-      </div>
-
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 flex flex-col min-h-screen">
-        
+        <header className="mb-8 flex items-center justify-between">
+          <button 
+            onClick={() => setGameState("landing")}
+            className="group flex items-center gap-2 font-ui text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+          >
+            <Home className="h-3 w-3" />
+            <span>Home</span>
+          </button>
+          <div className="font-ui text-[10px] font-bold uppercase tracking-widest text-white/20">
+            System V.04
+          </div>
+        </header>
+
         {/* LANDING PAGE */}
         {gameState === "landing" && (
           <section className="flex flex-1 flex-col items-center justify-center text-center animate-fade-in">
-            <div className="retina-scan mb-12 ceo-glass group hover:border-ritual-red transition-colors duration-500">
-              <Eye className="h-24 w-24 text-corp-blue group-hover:text-ritual-red transition-colors duration-1000" />
+            <div className="mb-12 flex items-center gap-4">
+              <div className="h-12 w-8 rounded-sm border-2 border-ritual-red bg-ritual-red/10 animate-pulse" />
+              <div className="h-16 w-10 rounded-sm border-2 border-corp-blue bg-corp-blue/10" />
+              <div className="h-12 w-8 rounded-sm border-2 border-ritual-red bg-ritual-red/10 animate-pulse" />
             </div>
             
-            <h1 className="mb-4 font-serif text-6xl font-black tracking-tighter sm:text-9xl">
-              CULT<span className="text-ritual-red animate-pulse">OR</span>CEO
+            <h1 className="mb-6 font-serif text-6xl font-black tracking-tighter sm:text-9xl">
+              CULT<span className="text-ritual-red">OR</span>CEO
             </h1>
-            <p className="mb-12 font-ui text-[10px] font-bold uppercase tracking-[0.8em] text-corp-blue">
-              A PROPHET, OR FOR-PROFIT?
-            </p>
+            
+            <div className="max-w-xl mb-12">
+              <p className="font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
+                One wants your eternal soul. The other wants your equity.
+              </p>
+              <p className="mt-4 font-ui text-xs font-bold uppercase tracking-[0.3em] text-corp-blue">
+                Read the quote. Identify the source. Survive the test.
+              </p>
+            </div>
             
             <div className="flex flex-col gap-6 w-full max-w-xs">
               <Button 
                 onClick={startGame}
-                className="h-20 w-full rounded-none border-2 border-corp-blue bg-transparent text-xl font-bold uppercase tracking-widest text-corp-blue hover:bg-corp-blue hover:text-void hover:shadow-corp transition-all duration-500"
+                className="h-20 w-full rounded-none bg-white text-void text-xl font-black uppercase tracking-widest hover:bg-ritual-red hover:text-white transition-all duration-300"
               >
-                INITIATE SCAN
+                BEGIN THE TEST
               </Button>
-              <p className="text-[10px] uppercase tracking-widest text-white/20 animate-glitch">DATA LEAK DETECTED: SEC-VOID-MANIFESTO.PDF</p>
+              <p className="text-[10px] uppercase tracking-widest text-white/20">60+ CLASSIFIED QUOTES LOADED</p>
             </div>
           </section>
         )}
@@ -198,26 +192,20 @@ export function CultTechGame() {
 
             <div className="mt-12 grid gap-6 sm:grid-cols-2">
               <button 
-                onMouseEnter={() => setCursorPhase("blink")}
-                onMouseLeave={() => setCursorPhase("eye")}
                 onClick={() => handleAnswer("cult_leader")}
                 className="group relative h-32 overflow-hidden bg-void border border-ritual-red/30 p-1 hover:border-ritual-red transition-all duration-300"
               >
                 <div className="flex h-full w-full flex-col items-center justify-center bg-ritual-red/5 font-ui text-2xl font-black uppercase tracking-[0.4em] text-ritual-red group-hover:bg-ritual-red/20">
-                  OBEY
-                  <span className="text-[8px] opacity-0 group-hover:opacity-40 transition-opacity mt-2">Cult Leader</span>
+                  CULT
                 </div>
               </button>
               
               <button 
-                onMouseEnter={() => setCursorPhase("blink")}
-                onMouseLeave={() => setCursorPhase("eye")}
                 onClick={() => handleAnswer("ceo")}
                 className="group relative h-32 overflow-hidden bg-void border border-corp-blue/30 p-1 hover:border-corp-blue transition-all duration-300"
               >
                 <div className="flex h-full w-full flex-col items-center justify-center bg-corp-blue/5 font-ui text-2xl font-black uppercase tracking-[0.4em] text-corp-blue group-hover:bg-corp-blue/20">
-                  INVEST
-                  <span className="text-[8px] opacity-0 group-hover:opacity-40 transition-opacity mt-2">Tech CEO</span>
+                  CEO
                 </div>
               </button>
             </div>
