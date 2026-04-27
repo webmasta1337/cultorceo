@@ -1,342 +1,337 @@
-import { useEffect, useMemo, useState, useRef } from "react";
-import { Clipboard, Home, Rocket, Share2, Trophy, Sparkles, Zap } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Clipboard, Home, Rocket, Share2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
+import { type GameStats, StatsModal } from "./StatsModal";
 
-const STORAGE_KEY = "cult-or-tech-stats-v2";
+const STORAGE_KEY = "cult-or-tech-stats";
+const DAILY_KEY_PREFIX = "cult-or-tech-daily";
+
+const defaultStats: GameStats = {
+  streak: 0,
+  bestStreak: 0,
+  totalGuesses: 0,
+  totalCorrect: 0,
+};
 
 type RoundResult = {
   guess: QuoteSource;
   isCorrect: boolean;
 };
 
-type GameState = "landing" | "playing" | "nudge" | "revealing" | "gameover";
 
-const TITLES = {
-  cult: ["Apocalyptic Visionary", "Messianic Disruptor", "Void Weaver", "Shadow Prophet", "Eschaton Architect"],
-  ceo: ["Golden Parachute Architect", "Series Z Survivor", "Equity Vampire", "Market Overlord", "Synergy High Priest"],
-  hybrid: ["Chaotic Neutral Founder", "Prophet of Profit", "Venture Shaman", "Kool-Aid Consultant"]
-};
+function sourceLabel(source: QuoteSource) {
+  return source === "cult_leader" ? "Cult Leader" : "CEO";
+}
+
+function todayKey() {
+  return `${DAILY_KEY_PREFIX}-${new Date().toISOString().slice(0, 10)}`;
+}
+
+function dailySeed() {
+  return Number(new Date().toISOString().slice(0, 10).replaceAll("-", ""));
+}
+
+function seededRandom(seed: number) {
+  let value = seed % 2147483647;
+  return () => {
+    value = (value * 16807) % 2147483647;
+    return (value - 1) / 2147483646;
+  };
+}
+
+function orderQuotesForToday(list: GameQuote[]) {
+  const shuffled = [...list]
+    .map((quote) => ({ quote, sort: Math.random() }))
+    .sort((first, second) => first.sort - second.sort)
+    .map(({ quote }) => quote);
+
+  return shuffled.reduce<GameQuote[]>((ordered, quote) => {
+    const last = ordered.at(-1);
+    if (!last || last.source !== quote.source) return [...ordered, quote];
+
+    const insertAt = ordered.findIndex((item, index) => item.source !== quote.source && ordered[index - 1]?.source !== quote.source);
+    if (insertAt <= 0) return [...ordered, quote];
+
+    return [...ordered.slice(0, insertAt), quote, ...ordered.slice(insertAt)];
+  }, []);
+}
 
 export function CultTechGame() {
-  const [gameState, setGameState] = useState<GameState>("landing");
-  const [quoteOrder, setQuoteOrder] = useState<GameQuote[]>([]);
+  const [started, setStarted] = useState(false);
+  const [quoteOrder, setQuoteOrder] = useState<GameQuote[]>(orderQuotesForToday(quotes));
   const [roundIndex, setRoundIndex] = useState(0);
   const [result, setResult] = useState<RoundResult | null>(null);
-  const [stats, setStats] = useState({ streak: 0, bestStreak: 0, cultPoints: 0, ceoPoints: 0 });
+  const [stats, setStats] = useState<GameStats>(defaultStats);
+  const [dailyGuesses, setDailyGuesses] = useState(0);
+  const [statsOpen, setStatsOpen] = useState(false);
+  const [shareStatus, setShareStatus] = useState("Share score");
   const [strikes, setStrikes] = useState(0);
-  const [showReveal, setShowReveal] = useState(false);
-  const [isNudging, setIsNudging] = useState(false);
-  const [flash, setFlash] = useState<"success" | "error" | null>(null);
+  const [gameOver, setGameOver] = useState(false);
+  const [showDamage, setShowDamage] = useState(false);
 
 
-  const currentQuote = useMemo(() => quoteOrder[roundIndex % quoteOrder.length], [quoteOrder, roundIndex]);
-
-
+  const currentQuote = quoteOrder[roundIndex % quoteOrder.length];
+  const currentHeadshot = quoteHeadshots[currentQuote.id];
+  const accuracy = stats.totalGuesses ? Math.round((stats.totalCorrect / stats.totalGuesses) * 100) : 0;
+  const progressDots = useMemo(() => quoteOrder.slice(0, 10), [quoteOrder]);
 
   useEffect(() => {
     const saved = window.localStorage.getItem(STORAGE_KEY);
-    if (saved) setStats(JSON.parse(saved));
-    
-    // Preload
-    headshotPreloadSources.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+    if (saved) {
+      setStats({ ...defaultStats, ...JSON.parse(saved) });
+    }
+    setDailyGuesses(Number(window.localStorage.getItem(todayKey()) ?? 0));
 
-    setQuoteOrder([...quotes].sort(() => Math.random() - 0.5));
+    headshotPreloadSources.forEach((src) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.fetchPriority = "high";
+      image.src = src;
+    });
   }, []);
 
   useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
   }, [stats]);
 
-  const startGame = () => {
-    setGameState("playing");
+  function startGame() {
+    setQuoteOrder(orderQuotesForToday(quotes));
     setRoundIndex(0);
-    setStrikes(0);
     setResult(null);
-    setStats({ streak: 0, bestStreak: 0, cultPoints: 0, ceoPoints: 0 });
-  };
+    setStarted(true);
+    setStrikes(0);
+    setGameOver(false);
+    setShareStatus("Share score");
+  }
 
-  const handleAnswer = (guess: QuoteSource) => {
-    // Add a chance for a "Nudge"
-    if (Math.random() > 0.8 && !isNudging) {
-      setIsNudging(true);
-      return;
-    }
+  function answer(guess: QuoteSource) {
+    if (result || gameOver) return;
 
     const isCorrect = guess === currentQuote.source;
     setResult({ guess, isCorrect });
-    
-    setStats(prev => ({
-      ...prev,
-      streak: isCorrect ? prev.streak + 1 : 0,
-      bestStreak: Math.max(prev.bestStreak, isCorrect ? prev.streak + 1 : 0),
-      cultPoints: prev.cultPoints + (guess === "cult_leader" ? 1 : 0),
-      ceoPoints: prev.ceoPoints + (guess === "ceo" ? 1 : 0),
-    }));
+    setStats((current) => {
+      const nextStreak = isCorrect ? current.streak + 1 : 0;
+      return {
+        streak: nextStreak,
+        bestStreak: Math.max(current.bestStreak, nextStreak),
+        totalGuesses: current.totalGuesses + 1,
+        totalCorrect: current.totalCorrect + (isCorrect ? 1 : 0),
+      };
+    });
+
+    const nextDaily = dailyGuesses + 1;
+    setDailyGuesses(nextDaily);
+    window.localStorage.setItem(todayKey(), String(nextDaily));
 
     if (!isCorrect) {
-      setStrikes(s => {
-        if (s + 1 >= 3) {
-          setTimeout(() => setGameState("gameover"), 2000);
-          return s + 1;
+      setShowDamage(true);
+      setTimeout(() => setShowDamage(false), 400);
+
+      setStrikes((s) => {
+        const nextStrikes = s + 1;
+        if (nextStrikes >= 3) {
+          setGameOver(true);
         }
-        return s + 1;
+        return nextStrikes;
       });
     }
+  }
 
-    setIsNudging(false);
-    setFlash(isCorrect ? "success" : "error");
-    setTimeout(() => setFlash(null), 500);
-
-    setGameState("revealing");
-    setShowReveal(false);
-    setTimeout(() => setShowReveal(true), 100);
-  };
-
-  const nextRound = () => {
-    if (gameState === "gameover") return;
-    setRoundIndex(prev => prev + 1);
+  function nextRound() {
+    setRoundIndex((current) => (current + 1) % quoteOrder.length);
     setResult(null);
-    setGameState("playing");
-  };
+    setShareStatus("Share score");
+  }
 
-  const generateTitle = () => {
-    const total = stats.cultPoints + stats.ceoPoints || 1;
-    const cultRatio = stats.cultPoints / total;
-    const ceoRatio = stats.ceoPoints / total;
+  async function shareScore() {
+    const message = gameOver 
+      ? `I survived ${roundIndex} rounds of Cult or CEO before getting fired/excommunicated. Think you can beat me? ${window.location.href}`
+      : `I can tell a cult leader from a CEO ${accuracy}% of the time. The confusion is terrifying. Can you beat me? ${window.location.href}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: "Cult or CEO?", text: message });
+      } else {
+        await navigator.clipboard.writeText(message);
+        setShareStatus("Copied");
+      }
+    } catch {
+      await navigator.clipboard.writeText(message);
+      setShareStatus("Share score");
+    }
+  }
 
-    if (cultRatio > 0.6) return TITLES.cult[Math.floor(Math.random() * TITLES.cult.length)];
-    if (ceoRatio > 0.6) return TITLES.ceo[Math.floor(Math.random() * TITLES.ceo.length)];
-    return TITLES.hybrid[Math.floor(Math.random() * TITLES.hybrid.length)];
-  };
+  const answerClass = result?.isCorrect ? "answer-correct" : result ? "answer-wrong" : "";
+  const badgeClass = currentQuote.source === "cult_leader" ? "bg-cult text-cult-foreground shadow-cult" : "bg-tech text-tech-foreground shadow-tech";
 
   return (
-    <main className="relative min-h-screen selection:bg-ritual-red selection:text-white overflow-hidden">
-      <div className="duality-bg" />
-      
-      {flash === "success" && <div className="flash-overlay-success" />}
-      {flash === "error" && <div className="flash-overlay-error" />}
-      
-      <div className="relative z-10 mx-auto max-w-4xl px-4 py-8 flex flex-col min-h-screen">
-        <header className="mb-8 flex items-center justify-between">
-          <button 
-            onClick={() => setGameState("landing")}
-            className="group flex items-center gap-2 font-ui text-[10px] font-bold uppercase tracking-widest text-white/40 hover:text-white transition-colors"
-          >
-            <Home className="h-3 w-3" />
-            <span>Home</span>
-          </button>
-          <div className="font-ui text-[10px] font-bold uppercase tracking-widest text-white/20">
-            System V.04
+    <main className="relative min-h-screen bg-background pb-12 text-foreground">
+      {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-600/20 mix-blend-color-burn" style={{ animation: 'chapel-pulse 300ms ease' }} />}
+      <div className="chapel-particles" aria-hidden="true" />
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
+        <header className="flex items-center justify-between gap-3 border-b border-border py-3">
+          <div className="flex items-center gap-2 min-w-0">
+            {started && (
+              <Button size="icon" variant="ghost" onClick={() => setStarted(false)} aria-label="Go home">
+                <Home className="h-4 w-4" />
+              </Button>
+            )}
+            <p className="min-w-0 truncate font-ui text-sm font-bold text-foreground">Cult or CEO?</p>
           </div>
+          <Button className="shrink-0" size="icon" variant="ghost" onClick={() => setStatsOpen(true)} aria-label="Open stats">
+            <Trophy />
+          </Button>
         </header>
 
-        {/* LANDING PAGE */}
-        {gameState === "landing" && (
-          <section className="flex flex-1 flex-col items-center justify-center text-center animate-fade-in">
-            <div className="mb-12 flex items-center gap-4">
-              <div className="h-12 w-8 rounded-sm border-2 border-ritual-red bg-ritual-red/10 animate-pulse" />
-              <div className="h-16 w-10 rounded-sm border-2 border-corp-blue bg-corp-blue/10" />
-              <div className="h-12 w-8 rounded-sm border-2 border-ritual-red bg-ritual-red/10 animate-pulse" />
-            </div>
-            
-            <h1 className="mb-6 font-serif text-6xl font-black tracking-tighter sm:text-9xl">
-              CULT<span className="text-ritual-red">OR</span>CEO
+        {!started ? (
+          <section className="flex flex-1 flex-col items-center justify-center py-14 text-center animate-fade-in">
+            <h1 className="max-w-4xl font-serif text-5xl font-black leading-none text-foreground sm:text-7xl lg:text-8xl">
+              Cult or CEO?
             </h1>
-            
-            <div className="max-w-xl mb-12">
-              <p className="font-serif text-2xl font-bold leading-tight text-white sm:text-3xl">
-                One wants your eternal soul. The other wants your equity.
-              </p>
-              <p className="mt-4 font-ui text-xs font-bold uppercase tracking-[0.3em] text-corp-blue">
-                Read the quote. Identify the source. Survive the test.
-              </p>
+            <p className="mt-6 max-w-2xl font-ui text-base leading-7 text-muted-foreground sm:text-lg">
+              One wants your eternal soul. The other wants your equity. Can you tell the difference?
+            </p>
+            <div className="mt-8 flex w-full max-w-md flex-col gap-4 sm:flex-row">
+              <Button className="h-16 flex-1 text-lg font-bold uppercase tracking-wider rounded-xl bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] active:scale-98" onClick={startGame}>
+                Play Game
+              </Button>
+              <Button className="h-16 flex-1 text-lg font-bold uppercase tracking-wider rounded-xl border-2 border-border bg-card shadow-lg" variant="outline" onClick={() => setStatsOpen(true)}>
+                Stats
+              </Button>
             </div>
             
-            <div className="flex flex-col gap-6 w-full max-w-xs">
-              <Button 
-                onClick={startGame}
-                className="h-20 w-full rounded-none bg-white text-void text-xl font-black uppercase tracking-widest hover:bg-ritual-red hover:text-white transition-all duration-300"
-              >
-                BEGIN THE TEST
+            <div className="relative mt-12 w-full max-w-2xl px-4 animate-glitch-in">
+              <div className="quote-card border-2 border-primary/20 shadow-2xl !py-8">
+                <p className="font-ui text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-4">Example Round</p>
+                <blockquote className="font-serif text-2xl font-bold leading-tight text-foreground sm:text-3xl">
+                  “Individual freedom matters less than the collective mission.”
+                </blockquote>
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  <div className="h-12 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-50">Cult Leader</div>
+                  <div className="h-12 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-50">Tech CEO</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-24 flex flex-col items-center gap-3 text-muted-foreground/60">
+              <span className="font-ui text-xs font-bold uppercase tracking-widest">How it works</span>
+              <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+            </div>
+
+            <div className="mt-32 grid w-full max-w-4xl gap-12 px-4 pb-20 text-left sm:grid-cols-3">
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">01</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Challenge</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
+                  We’ve collected 60+ verified quotes from the world's most powerful tech moguls and most notorious cult leaders. Your job is to tell them apart.
+                </p>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">02</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Choice</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
+                  Visionary leadership or high-control rhetoric? When the language of "disruption" meets the language of "transcendence," the line disappears.
+                </p>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div className="font-serif text-5xl font-black text-primary/40">03</div>
+                <h3 className="font-ui text-sm font-black uppercase tracking-wider text-foreground">The Survival</h3>
+                <p className="text-base leading-relaxed text-muted-foreground font-medium">
+                  You have 3 strikes. One wrong move and the system catches you. Survive as many rounds as possible.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-20 w-full max-w-3xl border-t-2 border-border pt-20 text-center">
+              <h2 className="font-serif text-4xl font-black text-foreground sm:text-6xl">Why we built this.</h2>
+              <p className="mt-8 font-ui text-lg leading-relaxed text-muted-foreground">
+                In the modern age, the "Founder" has become a messianic figure. We built <span className="text-primary font-bold">Cult or CEO</span> to highlight how easily the grammar of business can be swapped for the grammar of worship.
+              </p>
+              <Button className="mt-14 h-20 px-12 rounded-full bg-primary text-xl font-bold uppercase tracking-wider text-primary-foreground shadow-xl" onClick={startGame}>
+                Start Playing
               </Button>
-              <p className="text-[10px] uppercase tracking-widest text-white/20">60+ CLASSIFIED QUOTES LOADED</p>
             </div>
           </section>
-        )}
-
-        {/* PLAYING SCREEN */}
-        {gameState === "playing" && (
-          <section className="flex-1 flex flex-col justify-center animate-fade-in">
-            <header className="mb-12 flex items-center justify-between border-b border-white/10 pb-6">
-              <div className="font-ui text-[10px] font-bold uppercase tracking-widest text-corp-blue">
-                Indoctrination Phase: {roundIndex + 1}
+        ) : (
+          <section className="flex flex-1 flex-col justify-center py-4 animate-fade-in">
+            <h1 className="sr-only">Cult or CEO? Gameplay</h1>
+            <div className="mb-4 flex items-center justify-between gap-3 font-ui text-xs uppercase tracking-[0.18em] text-muted-foreground">
+              <span className={`transition-all duration-300 ${stats.streak >= 7 ? "streak-on-inferno" : stats.streak >= 3 ? "streak-on-fire" : ""}`}>
+                Streak {stats.streak} {stats.streak >= 3 && "🔥"}
+              </span>
+              <div className="flex gap-1 items-center">
+                <span>Strikes:</span>
+                {[1, 2, 3].map((i) => (
+                  <span key={i} className={`text-lg transition-colors ${i <= strikes ? "text-red-500 font-bold" : "text-muted opacity-30"}`}>X</span>
+                ))}
               </div>
-              <div className="flex gap-4">
-                <div className="flex gap-2">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className={`h-3 w-3 rounded-none rotate-45 border ${i <= strikes ? "bg-ritual-red border-ritual-red shadow-ritual" : "border-white/20"}`} />
-                  ))}
-                </div>
-              </div>
-            </header>
-
-            <div className="mb-2 self-destruct-progress w-full">
-              <div className="self-destruct-progress-fill" style={{ width: `${((roundIndex % 10) + 1) * 10}%` }} />
             </div>
-            <p className="mb-12 text-[9px] font-bold uppercase tracking-widest text-white/30">Cognitive Load: {Math.round(((roundIndex % 10) + 1) * 10)}%</p>
+            <div className="mb-4 grid grid-cols-10 gap-1.5" aria-label="Round progress">
+              {progressDots.map((quote, index) => (
+                <span key={quote.id} className={`h-1 rounded-full ${index === roundIndex % 10 ? "bg-primary" : "bg-muted"}`} />
+              ))}
+            </div>
 
-            <div className="group relative ceo-glass overflow-hidden p-8 sm:p-20 border-l-[12px] border-ritual-red transition-all duration-500 hover:border-l-[24px]">
-              <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none select-none font-serif text-[12rem]">§</div>
-              <blockquote className="relative z-10 font-serif text-3xl font-black leading-tight text-white sm:text-5xl italic">
+            <article className={`quote-card !py-10 ${answerClass}`}>
+              {result?.isCorrect && (
+                <div className="correct-burst" aria-live="polite">
+                  <span>Correct!</span>
+                </div>
+              )}
+              <p className="font-ui text-xs font-bold uppercase tracking-widest text-primary/60">Quote #{currentQuote.id}</p>
+              <blockquote className="mt-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-5xl">
                 “{currentQuote.quote}”
               </blockquote>
-              <div className="mt-12 font-ui text-[10px] font-bold uppercase tracking-[0.5em] text-ritual-red animate-glitch">CLASSIFIED EXHIBIT #{currentQuote.id}</div>
-            </div>
+            </article>
 
-            <div className="mt-12 grid gap-6 sm:grid-cols-2">
-              <button 
-                onClick={() => handleAnswer("cult_leader")}
-                className="group relative h-32 overflow-hidden bg-void border border-ritual-red/30 p-1 hover:border-ritual-red transition-all duration-300"
-              >
-                <div className="flex h-full w-full flex-col items-center justify-center bg-ritual-red/5 font-ui text-2xl font-black uppercase tracking-[0.4em] text-ritual-red group-hover:bg-ritual-red/20">
-                  CULT
-                </div>
-              </button>
-              
-              <button 
-                onClick={() => handleAnswer("ceo")}
-                className="group relative h-32 overflow-hidden bg-void border border-corp-blue/30 p-1 hover:border-corp-blue transition-all duration-300"
-              >
-                <div className="flex h-full w-full flex-col items-center justify-center bg-corp-blue/5 font-ui text-2xl font-black uppercase tracking-[0.4em] text-corp-blue group-hover:bg-corp-blue/20">
+            {!result ? (
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                <Button className="h-16 text-base sm:text-lg rounded-xl border-border bg-card shadow-ritual hover:bg-muted" variant="outline" onClick={() => answer("cult_leader")}>
+                   Cult Leader
+                </Button>
+                <Button className="h-16 text-base sm:text-lg rounded-xl bg-primary text-primary-foreground shadow-ritual transition-transform hover:scale-105" onClick={() => answer("ceo")}>
                   CEO
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-ritual animate-glitch-in">
+                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+                  <div className="speaker-frame h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-border shadow-ritual">
+                    <img src={quoteHeadshots[currentQuote.id].src} alt={quoteHeadshots[currentQuote.id].alt} className="speaker-headshot h-full w-full object-cover" />
+                  </div>
+                  <div className="flex-1 text-center sm:text-left">
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                       <span className={`rounded-full px-3 py-0.5 font-ui text-[9px] font-bold uppercase tracking-[0.2em] bg-primary text-primary-foreground`}>
+                        {currentQuote.source === "ceo" ? "CEO" : "CULT LEADER"}
+                      </span>
+                      <h2 className="font-serif text-2xl font-black text-foreground">{currentQuote.attribution}</h2>
+                    </div>
+                    <p className="mt-2 font-ui text-sm font-medium leading-snug text-foreground">
+                      {currentQuote.reveal}
+                    </p>
+                  </div>
                 </div>
-              </button>
-            </div>
-
-            {isNudging && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-void/90 backdrop-blur-xl animate-fade-in">
-                <div className="text-center p-8 border-2 border-ritual-red animate-pulse">
-                  <h3 className="font-serif text-3xl font-black text-ritual-red mb-6 uppercase tracking-widest">The Oracle Demands Certainty</h3>
-                  <p className="text-white/60 mb-8 uppercase text-[10px] tracking-widest leading-loose">Are you prepared for the consequences of this choice?</p>
-                  <Button 
-                    onClick={() => handleAnswer(currentQuote.source)} // Force correct for the nudge or just let them pick? 
-                    className="h-16 px-12 rounded-none bg-ritual-red text-white font-bold uppercase tracking-widest"
-                  >
-                    I AM CERTAIN
+                <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+                  {!gameOver ? (
+                    <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full bg-primary text-primary-foreground shadow-ritual" onClick={nextRound}>
+                      Continue
+                    </Button>
+                  ) : (
+                    <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full bg-red-600 text-white shadow-ritual" onClick={startGame}>
+                      Try Again
+                    </Button>
+                  )}
+                  <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full border-border bg-card" variant="outline" onClick={shareScore}>
+                    Share
                   </Button>
                 </div>
               </div>
             )}
           </section>
         )}
-
-        {/* REVEAL SCREEN */}
-        {gameState === "revealing" && showReveal && (
-          <section className="flex-1 flex flex-col justify-center items-center text-center animate-fade-in">
-            <div className="mb-12 relative">
-              <div className="absolute -inset-4 border-2 border-gold/20 animate-spin-slow" />
-              <div className="relative h-56 w-56 overflow-hidden rounded-none border-4 border-gold shadow-[0_0_50px_rgba(201,169,110,0.3)]">
-                <img 
-                  src={quoteHeadshots[currentQuote.id].src} 
-                  alt={currentQuote.attribution} 
-                  className="h-full w-full object-cover grayscale brightness-50" 
-                />
-              </div>
-            </div>
-            
-            <div className={`mb-6 inline-block px-8 py-2 font-ui text-xs font-black uppercase tracking-[0.8em] border-2 ${result?.isCorrect ? "border-glitch-green text-glitch-green bg-glitch-green/10" : "border-ritual-red text-ritual-red bg-ritual-red/10"}`}>
-              {result?.isCorrect ? "VERIFICATION SUCCESSFUL" : "COGNITIVE DISSONANCE"}
-            </div>
-            
-            <h2 className="mb-8 font-serif text-5xl font-black text-white sm:text-7xl uppercase tracking-tighter">
-              {result?.isCorrect ? "CORRECT" : "INCORRECT"}
-            </h2>
-            
-            <div className="mb-4 font-ui text-[10px] font-bold uppercase tracking-[0.4em] text-white/40">
-              SPOKEN BY {currentQuote.attribution}
-            </div>
-            
-            <div className="mx-auto max-w-2xl ceo-glass p-10 border-t-4 border-gold mb-16 relative">
-              <Sparkles className="absolute -top-3 -left-3 h-6 w-6 text-gold" />
-              <p className="font-ui text-lg leading-relaxed text-white">
-                {currentQuote.reveal}
-              </p>
-            </div>
-
-            <Button 
-              onClick={nextRound}
-              className="h-20 w-full max-w-sm rounded-none bg-white text-void font-black text-xl uppercase tracking-[0.2em] hover:bg-gold hover:text-void transition-all duration-500 shadow-ritual"
-            >
-              ASCEND
-            </Button>
-          </section>
-        )}
-
-        {/* GAME OVER / RESULTS */}
-        {gameState === "gameover" && (
-          <section className="flex-1 flex flex-col justify-center animate-fade-in text-center">
-            <div className="mb-12 flex items-center justify-center gap-4">
-              <div className="h-px flex-1 bg-white/10" />
-              <h2 className="font-serif text-4xl font-black text-white sm:text-6xl uppercase tracking-widest">JUDGMENT</h2>
-              <div className="h-px flex-1 bg-white/10" />
-            </div>
-
-            <div className="grid gap-8 sm:grid-cols-2 mb-16">
-              <div className="ceo-glass p-12 group transition-all duration-500 hover:bg-corp-blue/5">
-                <p className="text-6xl font-black text-corp-blue mb-4 transition-transform group-hover:scale-110">
-                  {Math.round((stats.ceoPoints / (stats.ceoPoints + stats.cultPoints || 1)) * 100)}%
-                </p>
-                <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">EQUITY OPTIMIZED</p>
-              </div>
-              <div className="ceo-glass p-12 group transition-all duration-500 hover:bg-ritual-red/5">
-                <p className="text-6xl font-black text-ritual-red mb-4 transition-transform group-hover:scale-110">
-                  {Math.round((stats.cultPoints / (stats.ceoPoints + stats.cultPoints || 1)) * 100)}%
-                </p>
-                <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">DIVINELY ALIGNED</p>
-              </div>
-            </div>
-
-            <div className="mb-16 border-4 border-gold p-16 bg-gold/5 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-              <p className="mb-6 font-ui text-[11px] font-bold uppercase tracking-[0.5em] text-gold">FINAL DESIGNATION</p>
-              <h3 className="font-serif text-4xl font-black text-white sm:text-7xl italic tracking-tight">{generateTitle()}</h3>
-            </div>
-
-            <div className="flex flex-col gap-6 max-w-md mx-auto">
-              <Button 
-                onClick={startGame}
-                className="h-20 rounded-none bg-ritual-red text-2xl font-black uppercase tracking-[0.2em] text-white hover:scale-105 transition-transform shadow-ritual"
-              >
-                RE-INITIALIZE
-              </Button>
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  onClick={() => {
-                    const msg = `I am a "${generateTitle()}". 60% Cult, 40% CEO. Can you tell the difference? ${window.location.href}`;
-                    navigator.clipboard.writeText(msg);
-                  }}
-                  className="h-14 rounded-none border border-white/20 bg-transparent text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white/10"
-                >
-                  EXPORT MANIFESTO
-                </Button>
-                <Button 
-                  onClick={() => window.location.reload()}
-                  className="h-14 rounded-none border border-white/20 bg-transparent text-[10px] font-bold uppercase tracking-widest text-white hover:bg-white/10"
-                >
-                  VOID SYSTEM
-                </Button>
-              </div>
-            </div>
-            
-            <p className="mt-20 text-[9px] uppercase tracking-[0.6em] text-white/20 font-bold">© 2026 VOID-CORP / NO SALVATION WITHOUT EQUITY</p>
-          </section>
-        )}
-
       </div>
+
+      <StatsModal open={statsOpen} stats={stats} onClose={() => setStatsOpen(false)} />
     </main>
   );
 }
