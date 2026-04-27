@@ -285,7 +285,9 @@ export function CultTechGame() {
             </article>
 
             {!result ? (
-              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+              <div className="mt-10">
+                <p className="mb-3 text-center font-serif text-sm italic text-muted-foreground">— who said it?</p>
+                <div className="grid gap-4 sm:grid-cols-2">
                 <button 
                   className="group relative flex h-24 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-border bg-card transition-all hover:border-red-500/50 hover:bg-red-500/5 active:scale-95 cult-choice-glow"
                   onClick={() => answer("cult_leader")}
@@ -303,6 +305,7 @@ export function CultTechGame() {
                   <span className="font-ui text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground transition-colors group-hover:text-primary/80">The Vision</span>
                   <span className="font-serif text-2xl font-black text-foreground">Tech CEO</span>
                 </button>
+                </div>
               </div>
             ) : (
               <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-ritual animate-glitch-in">
