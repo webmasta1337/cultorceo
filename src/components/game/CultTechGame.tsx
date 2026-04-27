@@ -92,12 +92,6 @@ export function CultTechGame() {
   }, []);
 
   useEffect(() => {
-    if (started && typeof window !== "undefined" && (window as any).loadSocialBar) {
-      (window as any).loadSocialBar();
-    }
-  }, [started]);
-
-  useEffect(() => {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
   }, [stats]);
 
