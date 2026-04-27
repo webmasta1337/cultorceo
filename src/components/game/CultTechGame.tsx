@@ -191,7 +191,7 @@ export function CultTechGame() {
             <p className="mt-6 max-w-2xl font-ui text-base leading-7 text-muted-foreground sm:text-lg">
               One wants your eternal soul. The other wants your equity. Can you tell the difference?
             </p>
-            <div className="mt-9 flex w-full max-w-md flex-col gap-4 sm:flex-row">
+            <div className="mt-8 flex w-full max-w-md flex-col gap-4 sm:flex-row">
               <Button className="h-16 flex-1 text-lg font-bold uppercase tracking-wider rounded-xl bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] active:scale-98" onClick={startGame}>
                 Play Game
               </Button>
@@ -200,18 +200,15 @@ export function CultTechGame() {
               </Button>
             </div>
             
-            <div className="relative mt-20 w-full max-w-2xl px-4 animate-glitch-in">
-              <div className="absolute -left-2 -top-2 h-4 w-4 rounded-full bg-primary/20 blur-sm" />
-              <div className="absolute -right-2 -bottom-2 h-4 w-4 rounded-full bg-red-500/20 blur-sm" />
-              
-              <div className="quote-card border-2 border-primary/20 shadow-2xl">
-                <p className="font-ui text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-8">Example Round</p>
-                <blockquote className="font-serif text-3xl font-bold leading-tight text-foreground sm:text-4xl italic">
+            <div className="relative mt-12 w-full max-w-2xl px-4 animate-glitch-in">
+              <div className="quote-card border-2 border-primary/20 shadow-2xl !py-8">
+                <p className="font-ui text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-4">Example Round</p>
+                <blockquote className="font-serif text-2xl font-bold leading-tight text-foreground sm:text-3xl">
                   “Individual freedom matters less than the collective mission.”
                 </blockquote>
-                <div className="mt-12 grid grid-cols-2 gap-4">
-                  <div className="h-14 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-50">Cult Leader</div>
-                  <div className="h-14 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-50">Tech CEO</div>
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  <div className="h-12 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-50">Cult Leader</div>
+                  <div className="h-12 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-50">Tech CEO</div>
                 </div>
               </div>
             </div>
@@ -256,9 +253,9 @@ export function CultTechGame() {
             </div>
           </section>
         ) : (
-          <section className="flex flex-1 flex-col justify-center py-8 animate-fade-in">
+          <section className="flex flex-1 flex-col justify-center py-4 animate-fade-in">
             <h1 className="sr-only">Cult or CEO? Gameplay</h1>
-            <div className="mb-5 flex items-center justify-between gap-3 font-ui text-xs uppercase tracking-[0.18em] text-muted-foreground">
+            <div className="mb-4 flex items-center justify-between gap-3 font-ui text-xs uppercase tracking-[0.18em] text-muted-foreground">
               <span className={`transition-all duration-300 ${stats.streak >= 7 ? "streak-on-inferno" : stats.streak >= 3 ? "streak-on-fire" : ""}`}>
                 Streak {stats.streak} {stats.streak >= 3 && "🔥"}
               </span>
@@ -269,26 +266,26 @@ export function CultTechGame() {
                 ))}
               </div>
             </div>
-            <div className="mb-6 grid grid-cols-10 gap-1.5" aria-label="Round progress">
+            <div className="mb-4 grid grid-cols-10 gap-1.5" aria-label="Round progress">
               {progressDots.map((quote, index) => (
-                <span key={quote.id} className={`h-1.5 rounded-full ${index === roundIndex % 10 ? "bg-primary" : "bg-muted"}`} />
+                <span key={quote.id} className={`h-1 rounded-full ${index === roundIndex % 10 ? "bg-primary" : "bg-muted"}`} />
               ))}
             </div>
 
-            <article className={`quote-card ${answerClass}`}>
+            <article className={`quote-card !py-10 ${answerClass}`}>
               {result?.isCorrect && (
                 <div className="correct-burst" aria-live="polite">
                   <span>Correct!</span>
                 </div>
               )}
-              <p className="font-ui text-sm font-bold uppercase tracking-widest text-primary/60">Quote #{currentQuote.id}</p>
-              <blockquote className="mt-10 font-serif text-4xl font-bold leading-snug text-foreground sm:text-6xl">
+              <p className="font-ui text-xs font-bold uppercase tracking-widest text-primary/60">Quote #{currentQuote.id}</p>
+              <blockquote className="mt-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-5xl">
                 “{currentQuote.quote}”
               </blockquote>
             </article>
 
             {!result ? (
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
                 <Button className="h-16 text-base sm:text-lg rounded-xl border-border bg-card shadow-ritual hover:bg-muted" variant="outline" onClick={() => answer("cult_leader")}>
                    Cult Leader
                 </Button>
@@ -297,34 +294,34 @@ export function CultTechGame() {
                 </Button>
               </div>
             ) : (
-              <div className="mt-6 rounded-xl border border-border bg-card p-6 shadow-ritual animate-glitch-in">
-                <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
-                  <div className="speaker-frame h-32 w-32 shrink-0 overflow-hidden rounded-xl border border-border shadow-ritual">
+              <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-ritual animate-glitch-in">
+                <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+                  <div className="speaker-frame h-24 w-24 shrink-0 overflow-hidden rounded-xl border border-border shadow-ritual">
                     <img src={quoteHeadshots[currentQuote.id].src} alt={quoteHeadshots[currentQuote.id].alt} className="speaker-headshot h-full w-full object-cover" />
                   </div>
                   <div className="flex-1 text-center sm:text-left">
-                    <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-start">
-                       <span className={`rounded-full px-4 py-1 font-ui text-[10px] font-bold uppercase tracking-[0.2em] bg-primary text-primary-foreground`}>
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                       <span className={`rounded-full px-3 py-0.5 font-ui text-[9px] font-bold uppercase tracking-[0.2em] bg-primary text-primary-foreground`}>
                         {currentQuote.source === "ceo" ? "CEO" : "CULT LEADER"}
                       </span>
-                      <h2 className="font-serif text-3xl font-black text-foreground">{currentQuote.attribution}</h2>
+                      <h2 className="font-serif text-2xl font-black text-foreground">{currentQuote.attribution}</h2>
                     </div>
-                    <p className="mt-4 font-ui text-base font-medium leading-relaxed text-foreground">
+                    <p className="mt-2 font-ui text-sm font-medium leading-snug text-foreground">
                       {currentQuote.reveal}
                     </p>
                   </div>
                 </div>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-6 flex flex-col gap-2 sm:flex-row">
                   {!gameOver ? (
-                    <Button className="h-14 flex-1 text-base font-bold uppercase tracking-widest rounded-full bg-primary text-primary-foreground shadow-ritual" onClick={nextRound}>
+                    <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full bg-primary text-primary-foreground shadow-ritual" onClick={nextRound}>
                       Continue
                     </Button>
                   ) : (
-                    <Button className="h-14 flex-1 text-base font-bold uppercase tracking-widest rounded-full bg-red-600 text-white shadow-ritual" onClick={startGame}>
+                    <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full bg-red-600 text-white shadow-ritual" onClick={startGame}>
                       Try Again
                     </Button>
                   )}
-                  <Button className="h-14 flex-1 text-base font-bold uppercase tracking-widest rounded-full border-border bg-card" variant="outline" onClick={shareScore}>
+                  <Button className="h-12 flex-1 text-sm font-bold uppercase tracking-widest rounded-full border-border bg-card" variant="outline" onClick={shareScore}>
                     Share
                   </Button>
                 </div>
