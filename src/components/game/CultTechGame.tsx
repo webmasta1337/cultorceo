@@ -273,16 +273,7 @@ export function CultTechGame() {
             </div>
 
             <article className={`quote-card !py-10 ${answerClass}`}>
-              {result?.isCorrect && (
-                <div className="correct-burst" aria-live="polite">
-                  <span>Correct!</span>
-                </div>
-              )}
-              {result && !result.isCorrect && (
-                <div className="wrong-burst" aria-live="polite">
-                  <span>Incorrect!</span>
-                </div>
-              )}
+
               <p className="font-ui text-xs font-bold uppercase tracking-widest text-primary/60">Quote #{currentQuote.id}</p>
               <blockquote className="mt-6 font-serif text-3xl font-bold leading-tight text-foreground sm:text-5xl">
                 “{currentQuote.quote}”
