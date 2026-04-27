@@ -24,16 +24,16 @@ type RoundResult = {
 
 const vibeSlides = [
   {
-    label: "Uncomfortably close",
-    quote: "Motivation speech or manipulation tactic? The line gets thin fast.",
+    label: "Can you tell the difference?",
+    quote: "Individual freedom matters less than the collective mission.",
   },
   {
-    label: "Real people, real quotes",
-    quote: "Every reveal shows the verified speaker behind the sentence.",
+    label: "The line is thin",
+    quote: "Humanity must escape its single point of failure.",
   },
   {
-    label: "Fast gut checks",
-    quote: "Trust your instincts, then find out if the confidence was deserved.",
+    label: "Who said it?",
+    quote: "You have been lied to about what is possible. We are here to show you the truth.",
   },
 ];
 

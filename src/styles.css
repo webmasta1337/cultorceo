@@ -123,9 +123,9 @@
   --ad-panel: oklch(0.16 0.045 306 / 72%);
   --ad-border: oklch(0.68 0.08 300 / 24%);
   --overlay: oklch(0.06 0.035 306 / 78%);
-  --shadow-ritual: 0 24px 80px -36px oklch(0.62 0.22 260 / 70%);
-  --shadow-cult: 0 0 32px oklch(0.55 0.23 15 / 38%);
-  --shadow-tech: 0 0 34px oklch(0.62 0.22 260 / 36%);
+  --shadow-ritual: 0 0 50px -10px oklch(0.62 0.22 260 / 50%), 0 0 20px -5px oklch(0.62 0.22 260 / 30%);
+  --shadow-cult: 0 0 40px oklch(0.55 0.23 15 / 50%);
+  --shadow-tech: 0 0 40px oklch(0.62 0.22 260 / 50%);
 }
 
 .dark {
@@ -196,7 +196,13 @@
     box-shadow: var(--shadow-ritual);
     padding: clamp(1.4rem, 5vw, 3.5rem);
     text-align: center;
-    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+    animation: floating 6s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
   .correct-burst {
