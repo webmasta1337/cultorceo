@@ -77,7 +77,7 @@ function orderQuotesForToday(list: GameQuote[]) {
 
 export function CultTechGame() {
   const [started, setStarted] = useState(false);
-  const [quoteOrder, setQuoteOrder] = useState<GameQuote[]>([]);
+  const [quoteOrder, setQuoteOrder] = useState<GameQuote[]>(orderQuotesForToday(quotes));
   const [roundIndex, setRoundIndex] = useState(0);
   const [result, setResult] = useState<RoundResult | null>(null);
   const [stats, setStats] = useState<GameStats>(defaultStats);
