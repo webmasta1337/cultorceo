@@ -99,15 +99,8 @@ export function CultTechGame() {
       socialBar.async = true;
       document.body.appendChild(socialBar);
 
-      // Popunder
-      const popunder = document.createElement("script");
-      popunder.src = "https://pl29277251.profitablecpmratenetwork.com/8e/cd/ba/8ecdba7a3998865f790256aeca26ce45.js";
-      popunder.async = true;
-      document.body.appendChild(popunder);
-
       return () => {
         if (document.body.contains(socialBar)) document.body.removeChild(socialBar);
-        if (document.body.contains(popunder)) document.body.removeChild(popunder);
       };
     }
   }, [started]);
