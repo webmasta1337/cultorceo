@@ -285,13 +285,24 @@ export function CultTechGame() {
             </article>
 
             {!result ? (
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                <Button className="h-16 text-base sm:text-lg rounded-xl border-border bg-card shadow-ritual hover:bg-muted" variant="outline" onClick={() => answer("cult_leader")}>
-                   Cult Leader
-                </Button>
-                <Button className="h-16 text-base sm:text-lg rounded-xl bg-primary text-primary-foreground shadow-ritual transition-transform hover:scale-105" onClick={() => answer("ceo")}>
-                  CEO
-                </Button>
+              <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                <button 
+                  className="group relative flex h-24 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-border bg-card transition-all hover:border-red-500/50 hover:bg-red-500/5 active:scale-95 cult-choice-glow"
+                  onClick={() => answer("cult_leader")}
+                >
+                  <div className="absolute inset-0 bg-red-500/0 opacity-20 transition-colors group-hover:bg-red-500/10" />
+                  <span className="font-ui text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground transition-colors group-hover:text-red-500/80">The Decree</span>
+                  <span className="font-serif text-2xl font-black text-foreground">Cult Leader</span>
+                </button>
+
+                <button 
+                  className="group relative flex h-24 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-border bg-card transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-95 ceo-choice-glow"
+                  onClick={() => answer("ceo")}
+                >
+                  <div className="absolute inset-0 bg-primary/0 opacity-20 transition-colors group-hover:bg-primary/10" />
+                  <span className="font-ui text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground transition-colors group-hover:text-primary/80">The Vision</span>
+                  <span className="font-serif text-2xl font-black text-foreground">Tech CEO</span>
+                </button>
               </div>
             ) : (
               <div className="mt-6 rounded-xl border border-border bg-card p-4 shadow-ritual animate-glitch-in">

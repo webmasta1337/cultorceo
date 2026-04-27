@@ -281,6 +281,14 @@
     animation: flame-flicker 0.3s ease-in-out infinite;
     font-weight: 900 !important;
   }
+
+  .cult-choice-glow:hover {
+    box-shadow: 0 0 40px -10px oklch(0.6 0.3 15 / 40%);
+  }
+
+  .ceo-choice-glow:hover {
+    box-shadow: 0 0 40px -10px oklch(0.7 0.25 260 / 40%);
+  }
 }
 
 @keyframes chapel-drift {
