@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Clipboard, Home, Rocket, Share2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
 import { useAdManager } from "@/hooks/useAdManager";
 import { AdInterstitial } from "./AdInterstitial";
@@ -22,23 +21,6 @@ type RoundResult = {
   isCorrect: boolean;
 };
 
-const vibeSlides = [
-  {
-    label: "PHASE 01: THE QUOTE",
-    quote: "Is it a radical startup vision or a dangerous cult decree?",
-    action: "READ CAREFULLY"
-  },
-  {
-    label: "PHASE 02: THE CHOICE",
-    quote: "Pick your path. Is this a Tech Visionary or a Master Manipulator?",
-    action: "CHOOSE WISELY"
-  },
-  {
-    label: "PHASE 03: THE SURVIVAL",
-    quote: "You have 3 strikes. One wrong move and you're out.",
-    action: "STAY SHARP"
-  },
-];
 
 function sourceLabel(source: QuoteSource) {
   return source === "cult_leader" ? "Cult Leader" : "CEO";
@@ -232,25 +214,21 @@ export function CultTechGame() {
               </Button>
             </div>
             
-            <Carousel className="mt-20 w-full max-w-xl" opts={{ loop: true }}>
-              <CarouselContent>
-                {vibeSlides.map((slide) => (
-                  <CarouselItem key={slide.label}>
-                    <div className="group relative overflow-hidden rounded-3xl border-2 border-primary/20 bg-card p-12 text-center shadow-2xl transition-all">
-                      <p className="font-ui text-xs font-bold uppercase tracking-widest text-primary">{slide.label}</p>
-                      <p className="mt-8 font-serif text-3xl font-bold leading-snug text-foreground sm:text-4xl">
-                        “{slide.quote}”
-                      </p>
-                      <div className="mt-10 inline-block rounded-full bg-primary/10 px-8 py-3 font-ui text-xs font-black uppercase tracking-widest text-primary border border-primary/20">
-                        {slide.action}
-                      </div>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden sm:flex left-[-3rem]" />
-              <CarouselNext className="hidden sm:flex right-[-3rem]" />
-            </Carousel>
+            <div className="relative mt-20 w-full max-w-2xl px-4 animate-glitch-in">
+              <div className="absolute -left-2 -top-2 h-4 w-4 rounded-full bg-primary/20 blur-sm" />
+              <div className="absolute -right-2 -bottom-2 h-4 w-4 rounded-full bg-red-500/20 blur-sm" />
+              
+              <div className="quote-card border-2 border-primary/20 shadow-2xl">
+                <p className="font-ui text-[10px] font-bold uppercase tracking-widest text-primary/60 mb-8">Example Round</p>
+                <blockquote className="font-serif text-3xl font-bold leading-tight text-foreground sm:text-4xl italic">
+                  “Individual freedom matters less than the collective mission.”
+                </blockquote>
+                <div className="mt-12 grid grid-cols-2 gap-4">
+                  <div className="h-14 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-50">Cult Leader</div>
+                  <div className="h-14 rounded-xl border-2 border-border bg-card flex items-center justify-center font-ui text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-50">Tech CEO</div>
+                </div>
+              </div>
+            </div>
 
             <div className="mt-24 flex flex-col items-center gap-3 text-muted-foreground/60">
               <span className="font-ui text-xs font-bold uppercase tracking-widest">How it works</span>
