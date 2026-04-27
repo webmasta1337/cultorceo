@@ -166,7 +166,7 @@ export function CultTechGame() {
 
   return (
     <main className="relative min-h-screen bg-background pb-12 text-foreground">
-      {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-600/20 mix-blend-color-burn" style={{ animation: 'chapel-pulse 300ms ease' }} />}
+      {showDamage && <div className="pointer-events-none fixed inset-0 z-50 bg-red-500/30" style={{ animation: 'chapel-pulse 300ms ease' }} />}
       <div className="chapel-particles" aria-hidden="true" />
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
         <header className="flex items-center justify-between gap-3 border-b border-border py-3">

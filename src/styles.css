@@ -149,49 +149,7 @@
     50% { transform: translateY(-10px); }
   }
 
-  .correct-burst {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: inherit;
-  }
 
-  .correct-burst span {
-    font-family: var(--font-ui);
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-correct);
-    text-shadow: 0 0 8px color-mix(in oklab, var(--color-correct) 60%, transparent);
-    animation: correct-pop-glow 0.8s ease forwards;
-  }
-
-  .wrong-burst {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: inherit;
-  }
-
-  .wrong-burst span {
-    font-family: var(--font-ui);
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-incorrect);
-    text-shadow: 0 0 8px color-mix(in oklab, var(--color-incorrect) 60%, transparent);
-    animation: correct-pop-glow 0.8s ease forwards;
-  }
 
   .quote-card:hover {
     transform: translateY(-2px);
