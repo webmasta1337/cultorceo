@@ -77,6 +77,9 @@ function orderQuotesForToday(list: GameQuote[]) {
 export function CultTechGame() {
   const [started, setStarted] = useState(false);
   const [quoteOrder, setQuoteOrder] = useState<GameQuote[]>(orderQuotesForToday(quotes));
+  const [advancedMode, setAdvancedMode] = useState(false);
+  const [gameState, setGameState] = useState<"category" | "person">("category");
+  const [personOptions, setPersonOptions] = useState<string[]>([]);
   const [roundIndex, setRoundIndex] = useState(0);
   const [result, setResult] = useState<RoundResult | null>(null);
   const [stats, setStats] = useState<GameStats>(defaultStats);
@@ -101,6 +104,9 @@ export function CultTechGame() {
     }
     setDailyGuesses(Number(window.localStorage.getItem(todayKey()) ?? 0));
 
+    const savedAdvanced = window.localStorage.getItem("cult-or-tech-advanced");
+    if (savedAdvanced) setAdvancedMode(savedAdvanced === "true");
+
     headshotPreloadSources.forEach((src) => {
       const image = new Image();
       image.decoding = "async";
@@ -116,6 +122,7 @@ export function CultTechGame() {
   function startGame() {
     setQuoteOrder(orderQuotesForToday(quotes));
     setRoundIndex(0);
+    setGameState("category");
     setResult(null);
     setStarted(true);
     setStrikes(0);
@@ -123,11 +130,41 @@ export function CultTechGame() {
     setShareStatus("Share score");
   }
 
+  function toggleAdvanced(val: boolean) {
+    setAdvancedMode(val);
+    window.localStorage.setItem("cult-or-tech-advanced", String(val));
+  }
+
   function answer(guess: QuoteSource) {
-    if (result || gameOver) return;
+    if (result || gameOver || gameState !== "category") return;
 
     const isCorrect = guess === currentQuote.source;
-    setResult({ guess, isCorrect });
+    
+    if (isCorrect && advancedMode) {
+      // Generate 3 options: the actual speaker + 2 random ones from the same category
+      const sameCategorySpeakers = Array.from(new Set(quotes
+        .filter(q => q.source === currentQuote.source && q.attribution !== currentQuote.attribution)
+        .map(q => q.attribution)
+      ));
+      const shuffled = sameCategorySpeakers.sort(() => 0.5 - Math.random());
+      const options = [currentQuote.attribution, ...shuffled.slice(0, 2)].sort(() => 0.5 - Math.random());
+      
+      setPersonOptions(options);
+      setGameState("person");
+      return;
+    }
+
+    handleFinalAnswer(isCorrect);
+  }
+
+  function answerPerson(guess: string) {
+    if (result || gameOver || gameState !== "person") return;
+    const isCorrect = guess === currentQuote.attribution;
+    handleFinalAnswer(isCorrect);
+  }
+
+  function handleFinalAnswer(isCorrect: boolean) {
+    setResult({ guess: currentQuote.source, isCorrect });
     setStats((current) => {
       const nextStreak = isCorrect ? current.streak + 1 : 0;
       if (nextStreak >= 3) {
@@ -163,6 +200,7 @@ export function CultTechGame() {
 
   function nextRound() {
     setRoundIndex((current) => (current + 1) % quoteOrder.length);
+    setGameState("category");
     setResult(null);
     setShareStatus("Share score");
   }
@@ -200,9 +238,21 @@ export function CultTechGame() {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-5 sm:px-6 lg:px-8">
         <header className="flex items-center justify-between gap-3 border-b border-border py-3">
           <p className="min-w-0 truncate font-ui text-sm font-bold text-foreground">Cult or CEO?</p>
-          <Button className="shrink-0" size="icon" variant="ghost" onClick={() => setStatsOpen(true)} aria-label="Open stats">
-            <Trophy />
-          </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label htmlFor="advanced-mode" className="font-ui text-[10px] uppercase tracking-widest text-muted-foreground">Advanced</label>
+              <input 
+                id="advanced-mode"
+                type="checkbox" 
+                checked={advancedMode} 
+                onChange={(e) => toggleAdvanced(e.target.checked)}
+                className="h-4 w-4 rounded border-border bg-background accent-primary"
+              />
+            </div>
+            <Button className="shrink-0" size="icon" variant="ghost" onClick={() => setStatsOpen(true)} aria-label="Open stats">
+              <Trophy />
+            </Button>
+          </div>
         </header>
 
         {!started ? (
@@ -270,12 +320,27 @@ export function CultTechGame() {
 
             {!result ? (
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Button className="h-16 text-base sm:text-lg" variant="cult" onClick={() => answer("cult_leader")}>
-                  <span aria-hidden="true">🕯️</span> Cult Leader
-                </Button>
-                <Button className="h-16 text-base sm:text-lg" variant="tech" onClick={() => answer("ceo")}>
-                  <Rocket /> CEO
-                </Button>
+                {gameState === "category" ? (
+                  <>
+                    <Button className="h-16 text-base sm:text-lg" variant="cult" onClick={() => answer("cult_leader")}>
+                      <span aria-hidden="true">🕯️</span> Cult Leader
+                    </Button>
+                    <Button className="h-16 text-base sm:text-lg" variant="tech" onClick={() => answer("ceo")}>
+                      <Rocket /> CEO
+                    </Button>
+                  </>
+                ) : (
+                  <div className="col-span-full grid gap-3">
+                    <p className="text-center font-ui text-xs uppercase tracking-widest text-primary mb-2">Identify the speaker</p>
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      {personOptions.map((option) => (
+                        <Button key={option} className="h-16 text-sm" variant="outline" onClick={() => answerPerson(option)}>
+                          {option}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-ritual animate-glitch-in">

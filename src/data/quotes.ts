@@ -553,6 +553,38 @@ export const quotes: GameQuote[] = [
     reveal: "That is the authoritarian core of many high-control groups: truth flows down from the system, never up from the people inside it.",
     speaker: "lRonHubbard",
   },
+  {
+    id: 57,
+    quote: "If we don't fix the alignment problem, we are just a very complicated way for the universe to commit suicide.",
+    source: "ceo",
+    attribution: "Sam Altman, OpenAI CEO",
+    reveal: "Altman’s AI safety language turns a software release into a binary choice between utopia and extinction. It’s a very effective way to make a product feel like a prophecy.",
+    speaker: "samAltman",
+  },
+  {
+    id: 58,
+    quote: "We are the only ones who can see what is really happening. Everyone else is just a ghost in the machine.",
+    source: "cult_leader",
+    attribution: "Marshall Applewhite, Heaven’s Gate leader",
+    reveal: "The 'Only We See The Truth' play is the foundation of every high-control group. It creates an instant 'Us vs. Them' dynamic that makes exit feel like failure.",
+    speaker: "marshallApplewhite",
+  },
+  {
+    id: 59,
+    quote: "I would rather be a billionaire in a post-apocalyptic wasteland I built than a middle-class person in a world I didn't control.",
+    source: "ceo",
+    attribution: "Peter Thiel, PayPal co-founder / investor",
+    reveal: "Thiel’s philosophy often prioritizes the sovereignty of the 'Founder' over the stability of the system. It’s the ultimate ego-trip as business strategy.",
+    speaker: "peterThiel",
+  },
+  {
+    id: 60,
+    quote: "The mission requires you to leave your family behind. If they don't support the vision, they are just baggage.",
+    source: "cult_leader",
+    attribution: "Keith Raniere, NXIVM founder",
+    reveal: "Cutting off family is a 'Cult 101' move. It ensures that the only emotional support the member has left comes from the group itself.",
+    speaker: "keithRaniere",
+  },
 ];
 
 export const quoteHeadshots: Record<number, SpeakerHeadshot> = Object.fromEntries(
