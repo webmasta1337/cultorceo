@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Clipboard, Home, Rocket, Share2, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { headshotPreloadSources, quoteHeadshots, quotes, type GameQuote, type QuoteSource } from "@/data/quotes";
-import { useAdManager } from "@/hooks/useAdManager";
-import { AdInterstitial } from "./AdInterstitial";
 import { type GameStats, StatsModal } from "./StatsModal";
 
 const STORAGE_KEY = "cult-or-tech-stats";
@@ -72,7 +70,7 @@ export function CultTechGame() {
   const [strikes, setStrikes] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [showDamage, setShowDamage] = useState(false);
-  const adManager = useAdManager(stats.streak);
+
 
   const currentQuote = quoteOrder[roundIndex % quoteOrder.length];
   const currentHeadshot = quoteHeadshots[currentQuote.id];
@@ -347,7 +345,6 @@ export function CultTechGame() {
       </div>
 
       <StatsModal open={statsOpen} stats={stats} onClose={() => setStatsOpen(false)} />
-      <AdInterstitial open={adManager.showInterstitial} onDismiss={adManager.dismissInterstitial} />
     </main>
   );
 }
